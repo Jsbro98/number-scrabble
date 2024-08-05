@@ -1,9 +1,8 @@
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(15, 30px);
+  grid-template-columns: repeat(15, 40px);
   justify-content: center;
 
-  margin: 20px;
   gap: 5px;
 }
 
@@ -15,7 +14,14 @@
 }
 
 .cell {
-  height: 30px;
-  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  width: 40px;
   border: 1px solid black;
+  font-family: 'Times New Roman', Times, serif;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
