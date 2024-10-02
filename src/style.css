@@ -1,9 +1,12 @@
+/* Game grid styling */
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(15, 40px);
-  justify-content: center;
+  justify-content: right;
 
   gap: 5px;
+  margin-right: 10%;
 }
 
 .row {
@@ -26,8 +29,17 @@
   font-weight: bold;
 }
 
-/* Drag styling */
+/* Tile container styling */
 
-#drag {
-  border: blue solid 1px;
+.tile-container {
+  display: flex;
+}
+
+.tile {
+  height: 40px;
+  width: 40px;
+  border: 1px solid black;
+  font-family: 'Times New Roman', Times, serif;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
