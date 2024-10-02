@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
     "incremental": true,
     "lib": [
       "ES6",
-      "ES7",
-      "ES5",
       "DOM",
-      "ScriptHost"
     ],
     "outDir": "src",
     "strict": true,
@@ -15,8 +14,10 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
+    "moduleResolution": "Node"
   },
   "exclude": [
-    "test/**"
+    "test/**",
+    "node_modules"
   ]
 }
