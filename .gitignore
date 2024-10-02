@@ -3,3 +3,9 @@ node_modules
 
 # package-lock
 package-lock.json
+
+# tsconfig buildinfo
+src/tsconfig.tsbuildinfo
+
+# generated index.js
+src/index.js
