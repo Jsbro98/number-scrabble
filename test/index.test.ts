@@ -1,6 +1,6 @@
-import { generateTile, Tile } from '../typescript/index';
+import { generateTile, Tile } from '../src/typescript/index';
 
-describe("Tile Generator", () => {
+describe("Tile Generator Function Tests", () => {
   let tile: Tile;
 
   beforeAll(() => {
