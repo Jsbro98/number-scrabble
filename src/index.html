@@ -4,12 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <script>
+      // hack to get rid of 'exports not defined' error
+      var exports = {};
+    </script>
     <script src="index.js" type="module" defer></script>
     <title>Number Scrabble</title>
   </head>
   <body>
-    <div class="tile-container">
+    <div class="tile-wrapper">
       <div class="tile-title">Current Tiles</div>
+      <div class="tile-container"></div>
     </div>
     <div class="grid-container">
       <div class="row 1">
