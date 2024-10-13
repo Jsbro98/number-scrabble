@@ -7,8 +7,10 @@
       "ES6",
       "DOM",
     ],
-    "outDir": "src",
+    "allowJs": true,
     "strict": true,
+    "outDir": "./src",
+    "rootDir": "./src/typescript",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -18,6 +20,9 @@
   },
   "exclude": [
     "test/**",
-    "node_modules"
+    "node_modules",
+    "babel.config.js",
+    "jest.config.mjs",
+    "src/*.js"
   ]
 }
