@@ -4,7 +4,10 @@ export type Tile = {
   value: number;
 };
 
+// ########################################################################
+// ########################################################################
 // ---------- Main function ----------
+
 function main(): void {
   const tileContainer = document.querySelector('.tile-container');
 
@@ -17,7 +20,8 @@ function main(): void {
   }
 }
 main();
-// -----------------------------------
+// ########################################################################
+// ########################################################################
 
 // Tile Generator
 export function generateTile(): Tile {
@@ -32,6 +36,8 @@ export function generateTile(): Tile {
   };
 
   function getTileNumber(): number {
-    return Math.floor(Math.random() * (999 - 0));
+    return Math.floor(Math.random() * (10) + 1);
   }
 }
+
+// Draggable tile logic
