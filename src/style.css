@@ -1,3 +1,10 @@
+/* Body styling */
+
+body {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Game grid styling */
 
 .grid-container {
@@ -6,7 +13,7 @@
   justify-content: right;
 
   gap: 5px;
-  margin-right: 10%;
+  margin-right: 5%;
 }
 
 .row {
@@ -29,10 +36,17 @@
   font-weight: bold;
 }
 
-/* Tile container styling */
+/* Tile styling */
+
+.tile-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
 .tile-container {
   display: flex;
+  gap: 5px;
 }
 
 .tile {
@@ -40,10 +54,9 @@
   justify-content: center;
   align-items: center;
 
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   border: 1px solid black;
   font-family: 'Times New Roman', Times, serif;
-  letter-spacing: 1px;
   font-weight: bold;
 }
