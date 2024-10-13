@@ -17,6 +17,6 @@ describe("Tile Generator Function Tests", () => {
     expect(tile.element).toBeTruthy();
     expect(tile.value).toBeTruthy();
     expect(tile.value).toBeGreaterThan(0);
-    expect(tile.value).toBeLessThan(1000);
+    expect(tile.value).toBeLessThan(11);
   });
 });
