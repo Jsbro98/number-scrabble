@@ -5,7 +5,7 @@ node_modules
 package-lock.json
 
 # tsconfig buildinfo
-src/tsconfig.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # generated index.js
 src/index.js
