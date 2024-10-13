@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 
 # generated index.js
 src/index.js
+
+# source map
+index.js.map
