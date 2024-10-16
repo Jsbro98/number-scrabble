@@ -20,12 +20,17 @@ let dragElem: Element | null = null;
 function main(): void {
 
   const numberTileContainer = document.querySelector('.number-tile-container');
+  const operatorTileContainer = document.querySelector('.operator-tile-container');
   const cells = document.querySelectorAll('.cell');
 
   setCellDragDropEvents(cells);
 
   if (numberTileContainer !== null) {
-    createAndAppendTiles(numberTileContainer, 10, 1);
+    createAndAppendTiles(numberTileContainer, 10, 'number');
+  }
+
+  if (operatorTileContainer !== null) {
+    createAndAppendTiles(operatorTileContainer, 5, 'operator');
   }
 }
 main();
@@ -38,19 +43,19 @@ export function getRandomNumber(max: number): number {
 }
 
 // Create and Append tile function
-function createAndAppendTiles(container: Element, numberOfTiles: number, type: number): void {
+function createAndAppendTiles(container: Element, numberOfTiles: number, type: string): void {
   for (let i = 0; i < numberOfTiles; i++) {
     container.appendChild(TileFactory(type).element);
   }
 }
 
 // Tile factory
-export function TileFactory(type: number) {
-  if (type === 1) {
+export function TileFactory(type: string) {
+  if (type === 'number') {
     return generateNumberTile();
   }
 
-  if (type === 2) {
+  if (type === 'operator') {
     return generateOperatorTile();
   }
 
