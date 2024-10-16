@@ -1,9 +1,16 @@
 // Tile Type
-export type Tile = {
+export type NumberTile = {
   element: Element;
   value: number;
 };
 
+export type OperatorTile = {
+  element: Element;
+  operator: string;
+};
+
+// used for drag n drop
+// TODO remove from global scope
 let dragElem: Element | null = null;
 
 // ########################################################################
@@ -12,31 +19,49 @@ let dragElem: Element | null = null;
 
 function main(): void {
 
-  const tileContainer = document.querySelector('.tile-container');
+  const numberTileContainer = document.querySelector('.number-tile-container');
   const cells = document.querySelectorAll('.cell');
 
   setCellDragDropEvents(cells);
 
-  if (tileContainer !== null) {
-    for (let i = 0; i < 10; i++) {
-      tileContainer.appendChild(generateTile().element);
-    }
-  } else {
-    console.log('title-container is null');
+  if (numberTileContainer !== null) {
+    createAndAppendTiles(numberTileContainer, 10, 1);
   }
 }
 main();
 // ########################################################################
 // ########################################################################
 
-// Tile Generator
-export function generateTile(): Tile {
-  const element: Element = document.createElement('div');
-  const tileValue = getTileNumber();
+// Random number generator
+export function getRandomNumber(max: number): number {
+  return Math.floor(Math.random() * (max) + 1);
+}
 
-  element.classList.add('tile');
+// Create and Append tile function
+function createAndAppendTiles(container: Element, numberOfTiles: number, type: number): void {
+  for (let i = 0; i < numberOfTiles; i++) {
+    container.appendChild(TileFactory(type).element);
+  }
+}
+
+// Tile factory
+export function TileFactory(type: number) {
+  if (type === 1) {
+    return generateNumberTile();
+  }
+
+  if (type === 2) {
+    return generateOperatorTile();
+  }
+
+  throw new TypeError('type parameter is not valid');
+}
+
+// NumberTile Generator
+export function generateNumberTile(): NumberTile {
+  const element: Element = createTileElement();
+  const tileValue = getRandomNumber(10);
   element.textContent = tileValue.toString();
-  element.setAttribute('draggable', 'true');
 
   setTileDragEvent(element);
 
@@ -44,14 +69,24 @@ export function generateTile(): Tile {
     element,
     value: tileValue,
   };
+}
 
-  function getTileNumber(): number {
-    return Math.floor(Math.random() * (10) + 1);
+// OperatorTile generator
+export function generateOperatorTile(): OperatorTile {
+  const operators: string[] = ['+', '-', '*', '/'];
+  const element = createTileElement();
+  const operatorValue = operators[getRandomNumber(operators.length) - 1];
+  element.textContent = operatorValue;
+
+  setTileDragEvent(element);
+
+  return {
+    element,
+    operator: operatorValue,
   }
 }
 
 // Cell event logic
-
 function setCellDragDropEvents(cells: NodeListOf<Element>) {
   cells.forEach(cell => {
     cell.addEventListener('drop', e => {
@@ -74,11 +109,17 @@ function setCellDragDropEvents(cells: NodeListOf<Element>) {
   });
 }
 
+// Tile element creator
+export function createTileElement(): Element {
+  const element: Element = document.createElement('div');
+  element.classList.add('tile');
+  element.setAttribute('draggable', 'true');
+
+  return element;
+}
+
 // Draggable tile logic
-
 function setTileDragEvent(element: Element) {
-
-
   element.addEventListener('dragstart', e => {
     console.log('dragStart');
 
