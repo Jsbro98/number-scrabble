@@ -1,3 +1,13 @@
+/*
+
+todo list:
+
+TODO create equals sign tile
+TODO create functionality for equation checking
+TODO create drag n drop to return tile back to container
+
+*/
+
 // Tile Type
 export type NumberTile = {
   element: Element;
