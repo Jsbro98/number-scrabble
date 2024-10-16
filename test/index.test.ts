@@ -1,10 +1,11 @@
-import { generateTile, Tile } from '../src/typescript/index';
+import { generateNumberTile, NumberTile, generateOperatorTile, OperatorTile } from '../src/typescript/index';
 
-describe("Tile Generator Function Tests", () => {
-  let tile: Tile;
+// NumberTile tests
+describe("NumberTile Generator Function Tests", () => {
+  let tile: NumberTile;
 
   beforeAll(() => {
-    tile = generateTile();
+    tile = generateNumberTile();
   });
 
   it("generates a tile instance", () => {
@@ -20,3 +21,27 @@ describe("Tile Generator Function Tests", () => {
     expect(tile.value).toBeLessThan(11);
   });
 });
+
+// OperatorTile Tests
+describe('OperatorTile Generator Tests', () => {
+  let tile: OperatorTile;
+  const operators = ['+', '-', '*', '/'];
+
+  beforeAll(() => {
+    tile = generateOperatorTile();
+  })
+
+  it('creates a tile instance', () => {
+    expect(tile).toBeTruthy();
+  })
+
+  it('has the required OperatorTile values', () => {
+    expect(tile.element).toBeTruthy();
+    expect(tile.element).toBeInstanceOf(Element);
+
+    for (let i = 0; i < 10; i++) {
+      tile = generateOperatorTile();
+      expect(operators).toContain(tile.operator);
+    }
+  })
+})
