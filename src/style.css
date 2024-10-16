@@ -44,7 +44,7 @@ body {
   gap: 15px;
 }
 
-.tile-container {
+.number-tile-container, .operator-tile-container {
   display: flex;
   gap: 5px;
 }
