@@ -2,12 +2,12 @@
 
 import { evaluate, MathExpression } from 'mathjs';
 
-type Equation = {
+export type Equation = {
   leftSide: string;
   rightSide: string;
 }
 
-class EquationChecker {
+export class EquationChecker {
   private equation: Equation;
 
   constructor(eq: Equation) {
