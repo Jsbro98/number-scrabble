@@ -1,4 +1,5 @@
 import { generateNumberTile, NumberTile, generateOperatorTile, OperatorTile } from '../src/typescript/index';
+import { EquationChecker } from '../src/typescript/equationChecker';
 
 // NumberTile tests
 describe("NumberTile Generator Function Tests", () => {
@@ -43,5 +44,17 @@ describe('OperatorTile Generator Tests', () => {
       tile = generateOperatorTile();
       expect(operators).toContain(tile.operator);
     }
+  })
+})
+
+
+// EquationChecker tests
+
+// TODO continue on tests
+describe('EquationChecker Tests', () => {
+  it('successfully creates an instance', () => {
+    const result: EquationChecker = new EquationChecker({ leftSide: '5 + 5', rightSide: '25 * 9' });
+    expect(result).toBeDefined();
+    expect(result).toBeInstanceOf(EquationChecker);
   })
 })
