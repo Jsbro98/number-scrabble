@@ -51,14 +51,19 @@ describe('OperatorTile Generator Tests', () => {
 // EquationChecker tests
 
 describe('EquationChecker Tests', () => {
+  let ec: EquationChecker;
+
+  beforeAll(() => {
+    ec = new EquationChecker();
+  })
   it('successfully creates an instance', () => {
-    const result: EquationChecker = new EquationChecker({ leftSide: '5 + 5', rightSide: '25 * 9' });
-    expect(result).toBeDefined();
-    expect(result).toBeInstanceOf(EquationChecker);
+    ec.setEquation({ leftSide: '5 + 5', rightSide: '25 * 9' });
+    expect(ec).toBeDefined();
+    expect(ec).toBeInstanceOf(EquationChecker);
   })
 
   it('checks equations', () => {
-    const ec = new EquationChecker({ leftSide: '10 * 25 + 500', rightSide: '5 - 1 / 4' });
+    ec.setEquation({ leftSide: '10 * 25 + 500', rightSide: '5 - 1 / 4' });
     expect(ec.checkEquation()).toBeFalsy();
 
     ec.setEquation({ leftSide: '5 + 5', rightSide: '5 + 5' });
