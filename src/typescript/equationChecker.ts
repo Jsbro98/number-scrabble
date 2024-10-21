@@ -8,18 +8,35 @@ export type Equation = {
 }
 
 export class EquationChecker {
-  private equation: Equation;
+  private equation?: Equation;
 
-  constructor(eq: Equation) {
-    this.equation = eq;
+  constructor();
+  constructor(eq: Equation);
+
+  constructor(eq?: Equation) {
+    if (eq) {
+      this.setEquation(eq);
+    }
+  }
+
+  private get hasEquation(): boolean {
+    return this.equation !== undefined;
   }
 
   private get leftSide(): string {
-    return this.equation.leftSide;
+    if (!this.hasEquation) {
+      throw new Error('equation left side is undefined');
+    }
+
+    return this.equation!.leftSide!;
   }
 
   private get rightSide(): string {
-    return this.equation.rightSide;
+    if (!this.hasEquation) {
+      throw new Error('equation right side is undefined');
+    }
+
+    return this.equation!.rightSide!;
   }
 
   private isSideLengthOne(side: string): string | false {
