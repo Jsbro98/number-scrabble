@@ -47,7 +47,6 @@ describe('OperatorTile Generator Tests', () => {
   })
 })
 
-
 // EquationChecker tests
 
 describe('EquationChecker Tests', () => {
