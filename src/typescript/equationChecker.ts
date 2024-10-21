@@ -42,11 +42,11 @@ export class EquationChecker {
     }
 
     if (!left) {
-      processedLeft = evaluate(left as MathExpression);
+      processedLeft = evaluate(this.leftSide as MathExpression);
     }
 
     if (!right) {
-      processedRight = evaluate(right as MathExpression);
+      processedRight = evaluate(this.rightSide as MathExpression);
     }
 
     if (isNaN(processedLeft) || isNaN(processedRight)) {
