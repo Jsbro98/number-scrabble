@@ -7,8 +7,9 @@ package-lock.json
 # tsconfig buildinfo
 tsconfig.tsbuildinfo
 
-# generated index.js
-src/index.js
+# compiled js
+src/*.js
+src/*.js.map
 
-# source map
-index.js.map
+# vscode folder
+.vscode
