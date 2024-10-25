@@ -24,6 +24,7 @@
     "node_modules",
     "babel.config.js",
     "jest.config.mjs",
-    "dist"
+    "dist",
+    "webpack.config.cjs"
   ]
 }
