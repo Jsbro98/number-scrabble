@@ -8,8 +8,7 @@ package-lock.json
 tsconfig.tsbuildinfo
 
 # compiled js
-src/*.js
-src/*.js.map
+dist
 
 # vscode folder
 .vscode
