@@ -3,16 +3,18 @@
 todo list:
 
 TODO create equals sign tile
-TODO create functionality for equation checking
 TODO create drag n drop to return tile back to container
+TODO create custom classes for:
+  - NumberTile
+  - OperatorTile
+  - EqualsTile
 
 */
 
+
+import { NumberTile } from "./tile";
+
 // Tile Type
-export type NumberTile = {
-  element: Element;
-  value: number;
-};
 
 export type OperatorTile = {
   element: Element;
@@ -55,7 +57,10 @@ export function getRandomNumber(max: number): number {
 // Create and Append tile function
 function createAndAppendTiles(container: Element, numberOfTiles: number, type: string): void {
   for (let i = 0; i < numberOfTiles; i++) {
-    container.appendChild(TileFactory(type).element);
+
+    // TODO fix this to have OperatorTile return Element here
+    const element = TileFactory(type);
+    container.appendChild(element instanceof NumberTile ? element : element.element);
   }
 }
 
@@ -74,16 +79,7 @@ export function TileFactory(type: string) {
 
 // NumberTile Generator
 export function generateNumberTile(): NumberTile {
-  const element: Element = createTileElement();
-  const tileValue = getRandomNumber(10);
-  element.textContent = tileValue.toString();
-
-  setTileDragEvent(element);
-
-  return {
-    element,
-    value: tileValue,
-  };
+  return new NumberTile();
 }
 
 // OperatorTile generator
@@ -134,7 +130,7 @@ export function createTileElement(): Element {
 }
 
 // Draggable tile logic
-function setTileDragEvent(element: Element) {
+export function setTileDragEvent(element: Element) {
   element.addEventListener('dragstart', e => {
     console.log('dragStart');
 
