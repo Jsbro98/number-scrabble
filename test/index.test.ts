@@ -1,5 +1,6 @@
-import { generateNumberTile, NumberTile, generateOperatorTile, OperatorTile } from '../src/typescript/index';
+import { generateNumberTile, generateOperatorTile, OperatorTile } from '../src/typescript/index';
 import { EquationChecker } from '../src/typescript/equationChecker';
+import { NumberTile } from '../src/typescript/tile';
 
 // NumberTile tests
 describe("NumberTile Generator Function Tests", () => {
@@ -7,19 +8,24 @@ describe("NumberTile Generator Function Tests", () => {
 
   beforeAll(() => {
     tile = generateNumberTile();
+    document.body.appendChild(tile);
   });
 
   it("generates a tile instance", () => {
     expect(tile).toBeTruthy();
+    expect(tile).toBeInstanceOf(NumberTile);
   });
 
   it("has each required value", () => {
-    expect(tile).toBeTruthy();
-    expect(tile.element).toBeInstanceOf(Element);
-    expect(tile.element).toBeTruthy();
-    expect(tile.value).toBeTruthy();
-    expect(tile.value).toBeGreaterThan(0);
-    expect(tile.value).toBeLessThan(11);
+    for (let i = 0; i < 5; i++) {
+      document.body.removeChild(tile);
+      tile = new NumberTile();
+      document.body.appendChild(tile);
+      expect(tile).toBeTruthy();
+      expect(tile.dataset.value).toBeTruthy();
+      expect(tile.getDataValueAsNumber()).toBeGreaterThan(0);
+      expect(tile.getDataValueAsNumber()).toBeLessThan(11);
+    }
   });
 });
 
