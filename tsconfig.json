@@ -9,8 +9,8 @@
     ],
     "allowJs": true,
     "strict": true,
-    "outDir": "./src",
-    "rootDir": "./src/typescript",
+    "outDir": "dist",
+    "rootDir": "src/typescript",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -24,6 +24,6 @@
     "node_modules",
     "babel.config.js",
     "jest.config.mjs",
-    "src/*.js"
+    "dist"
   ]
 }
