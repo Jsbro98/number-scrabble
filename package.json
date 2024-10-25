@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -37,8 +38,11 @@
     "parse5": "^7.1.2",
     "pretty-format": "^29.7.0",
     "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
-    "undici": "^6.19.8"
+    "typescript": "^5.6.3",
+    "undici": "^6.19.8",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   }
 }
