@@ -30,8 +30,11 @@ export class OperatorTile extends HTMLDivElement {
 
   connectedCallback() {
     setTileDragEvent(this);
+    this.setAttribute('is', 'operator-tile');
     this.setAttribute('data-operator', this.currentOperator);
     this.textContent = this.currentOperator;
+    this.setAttribute('draggable', 'true');
+    this.classList.add("tile");
   }
 
   private getNewOperator(): string {
@@ -40,4 +43,4 @@ export class OperatorTile extends HTMLDivElement {
 }
 
 customElements.define('number-tile', NumberTile, { extends: 'div' });
-customElements.define('operator-tile', NumberTile, { extends: 'div' });
+customElements.define('operator-tile', OperatorTile, { extends: 'div' });
