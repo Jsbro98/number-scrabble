@@ -2,7 +2,6 @@ import { makeDragAndDropContainer, createAndAppendTiles } from './utils';
 
 /*
 fixmes:
-FIXME observed error where drag n dropping tile changed tile value
 
 todo list:
 
