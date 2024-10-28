@@ -14,9 +14,7 @@ export function getRandomNumber(max: number): number {
 // Create and Append tile function
 export function createAndAppendTiles(container: Element, numberOfTiles: number, type: string): void {
   for (let i = 0; i < numberOfTiles; i++) {
-
-    const element = TileFactory(type);
-    container.appendChild(element);
+    container.appendChild(TileFactory(type));
   }
 }
 
@@ -56,15 +54,6 @@ export function makeDragAndDropContainer(...element: Element[]) {
       e.preventDefault();
     });
   })
-}
-
-// Tile element creator
-export function createTileElement(): Element {
-  const element: Element = document.createElement('div');
-  element.classList.add('tile');
-  element.setAttribute('draggable', 'true');
-
-  return element;
 }
 
 // Draggable tile logic
