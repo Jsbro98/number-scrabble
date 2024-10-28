@@ -41,12 +41,15 @@ body {
 .tile-wrapper {
   display: flex;
   flex-direction: column;
+  width: 30%;
   gap: 15px;
 }
 
 .number-tile-container, .operator-tile-container {
   display: flex;
   gap: 5px;
+  border: lightgrey solid 2px;
+  padding: 10px;
 }
 
 .tile {
