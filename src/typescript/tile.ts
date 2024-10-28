@@ -1,4 +1,4 @@
-import { setTileDragEvent, getRandomNumber } from './index';
+import { setTileDragEvent, getRandomNumber } from './utils';
 
 export class NumberTile extends HTMLDivElement {
   constructor() {
