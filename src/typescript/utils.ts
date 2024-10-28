@@ -1,10 +1,16 @@
-// helper functions used for main in index.ts
+/*
+  ##################################
+  Helper functions used in index.ts
+  ##################################
+*/
 
 import { NumberTile, OperatorTile } from "./tile";
 
 
-// used for drag n drop
+// --- used for drag n drop functionality ---
 let dragElem: Element | null = null;
+
+
 
 // Random number generator
 export function getRandomNumber(max: number): number {
