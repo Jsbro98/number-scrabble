@@ -1,9 +1,9 @@
 import { NumberTile, OperatorTile } from "./tile";
 
 /*
-
 todo list:
 
+TODO move all functions to their own file to avoid test import errors
 TODO create drag n drop to return tile back to container
 TODO create custom classes for:
   - EqualsTile
@@ -24,17 +24,16 @@ function main(): void {
   const operatorTileContainer = document.querySelector('.operator-tile-container');
   const cells = document.querySelectorAll('.cell');
 
-  setCellDragDropEvents(cells);
-
-  if (numberTileContainer !== null) {
-    createAndAppendTiles(numberTileContainer, 10, 'number');
+  if (numberTileContainer === null || operatorTileContainer === null || cells === null) {
+    throw new Error('one of the game container selectors returned null');
   }
 
-  if (operatorTileContainer !== null) {
-    createAndAppendTiles(operatorTileContainer, 5, 'operator');
-  }
+  makeDragAndDropContainer(numberTileContainer, operatorTileContainer, ...cells);
+  createAndAppendTiles(numberTileContainer, 10, 'number');
+  createAndAppendTiles(operatorTileContainer, 5, 'operator');
 }
 main();
+
 // ########################################################################
 // ########################################################################
 
@@ -66,10 +65,10 @@ export function TileFactory(type: string) {
   throw new TypeError('type parameter is not valid');
 }
 
-// Cell event logic
-function setCellDragDropEvents(cells: NodeListOf<Element>) {
-  cells.forEach(cell => {
-    cell.addEventListener('drop', e => {
+// Drag n drop container enabler
+function makeDragAndDropContainer(...element: Element[]) {
+  element.forEach(elem => {
+    elem.addEventListener('drop', e => {
       console.log('drop');
       e.preventDefault();
 
@@ -83,10 +82,12 @@ function setCellDragDropEvents(cells: NodeListOf<Element>) {
     });
 
     // Allow drop
-    cell.addEventListener('dragover', e => {
+    elem.addEventListener('dragover', e => {
+      console.log('dragging...');
+      console.log({ dragElem, target: e.target });
       e.preventDefault();
     });
-  });
+  })
 }
 
 // Tile element creator
