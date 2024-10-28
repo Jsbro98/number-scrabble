@@ -1,4 +1,4 @@
-import { setTileDragEvent } from "./index";
+import { setTileDragEvent, getRandomNumber } from './index';
 
 export class NumberTile extends HTMLDivElement {
   constructor() {
@@ -7,7 +7,7 @@ export class NumberTile extends HTMLDivElement {
 
   connectedCallback() {
     setTileDragEvent(this);
-    this.setAttribute('data-value', this.getRandomNumber(10));
+    this.setAttribute('data-value', getRandomNumber(10).toString());
     this.setAttribute('is', 'number-tile');
     this.setAttribute('draggable', 'true');
     this.classList.add("tile");
@@ -17,10 +17,27 @@ export class NumberTile extends HTMLDivElement {
   getDataValueAsNumber(): number {
     return Number(this.dataset.value);
   }
+}
 
-  private getRandomNumber(max: number): string {
-    return Math.floor(Math.random() * (max) + 1).toString();
+export class OperatorTile extends HTMLDivElement {
+  private OPERATORS = ['*', '-', '/', '+'];
+  private currentOperator: string;
+
+  constructor() {
+    super();
+    this.currentOperator = this.getNewOperator();
+  }
+
+  connectedCallback() {
+    setTileDragEvent(this);
+    this.setAttribute('data-operator', this.currentOperator);
+    this.textContent = this.currentOperator;
+  }
+
+  private getNewOperator(): string {
+    return this.OPERATORS[getRandomNumber(this.OPERATORS.length) - 1];
   }
 }
 
 customElements.define('number-tile', NumberTile, { extends: 'div' });
+customElements.define('operator-tile', NumberTile, { extends: 'div' });
