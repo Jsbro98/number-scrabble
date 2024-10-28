@@ -1,6 +1,9 @@
 import { makeDragAndDropContainer, createAndAppendTiles } from './utils';
 
 /*
+fixmes:
+FIXME observed error where drag n dropping tile changed tile value
+
 todo list:
 
 TODO move all functions to their own file to avoid test import errors
