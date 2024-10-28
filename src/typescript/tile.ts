@@ -1,11 +1,11 @@
-import { setTileDragEvent, getRandomNumber } from './utils';
+import { DragNDropManager, getRandomNumber } from './utils';
 
 export class NumberTile extends HTMLDivElement {
   private numberValue: number;
 
   constructor() {
     super();
-    setTileDragEvent(this);
+    DragNDropManager.setTileDragEvent(this);
     this.numberValue = getRandomNumber(10);
   }
 
@@ -29,7 +29,7 @@ export class OperatorTile extends HTMLDivElement {
   constructor() {
     super();
     this.currentOperator = this.getNewOperator();
-    setTileDragEvent(this);
+    DragNDropManager.setTileDragEvent(this);
   }
 
   connectedCallback() {

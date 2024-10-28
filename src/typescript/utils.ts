@@ -7,8 +7,7 @@
 import { NumberTile, OperatorTile } from "./tile";
 
 
-// --- used for drag n drop functionality ---
-let dragElem: Element | null = null;
+
 
 
 
@@ -37,39 +36,51 @@ export function TileFactory(type: string) {
   throw new TypeError('type parameter is not valid');
 }
 
-// Drag n drop container enabler
-export function makeDragAndDropContainer(...element: Element[]) {
-  element.forEach(elem => {
-    elem.addEventListener('drop', e => {
-      console.log('drop');
-      e.preventDefault();
 
-      if (dragElem) {
-        dragElem.parentNode?.removeChild(dragElem);
-        if (e.target instanceof Element) {
-          e.target.appendChild(dragElem);
-          dragElem = null;
+
+export const DragNDropManager = (() => {
+
+  // --- used for drag n drop functionality ---
+  let dragElem: Element | null = null;
+
+
+  // Drag n drop container enabler
+  function makeDragAndDropContainer(...elements: Element[]) {
+    elements.forEach(elem => {
+      elem.addEventListener('drop', e => {
+        console.log('drop');
+        e.preventDefault();
+
+        if (dragElem) {
+          dragElem.parentNode?.removeChild(dragElem);
+          if (e.target instanceof Element) {
+            e.target.appendChild(dragElem);
+            dragElem = null;
+          }
         }
+      });
+
+      // Allow drop
+      elem.addEventListener('dragover', e => {
+        console.log('dragging...');
+        console.log({ dragElem, target: e.target });
+        e.preventDefault();
+      });
+    })
+  }
+
+
+  // Draggable tile logic
+  function setTileDragEvent(element: Element) {
+    element.addEventListener('dragstart', e => {
+      console.log('dragStart');
+
+      if (e.target instanceof Element) {
+        dragElem = e.target;
+        console.log({ dragElem, target: e.target });
       }
     });
+  }
 
-    // Allow drop
-    elem.addEventListener('dragover', e => {
-      console.log('dragging...');
-      console.log({ dragElem, target: e.target });
-      e.preventDefault();
-    });
-  })
-}
-
-// Draggable tile logic
-export function setTileDragEvent(element: Element) {
-  element.addEventListener('dragstart', e => {
-    console.log('dragStart');
-
-    if (e.target instanceof Element) {
-      dragElem = e.target;
-      console.log({ dragElem, target: e.target });
-    }
-  });
-}
+  return { makeDragAndDropContainer, setTileDragEvent };
+})();

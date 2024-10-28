@@ -1,4 +1,4 @@
-import { makeDragAndDropContainer, createAndAppendTiles } from './utils';
+import { DragNDropManager, createAndAppendTiles } from './utils';
 
 /*
 fixmes:
@@ -26,7 +26,7 @@ function main(): void {
     throw new Error('one of the game container selectors returned null');
   }
 
-  makeDragAndDropContainer(numberTileContainer, operatorTileContainer, ...cells);
+  DragNDropManager.makeDragAndDropContainer(numberTileContainer, operatorTileContainer, ...cells);
   createAndAppendTiles(numberTileContainer, 10, 'number');
   createAndAppendTiles(operatorTileContainer, 5, 'operator');
 }
