@@ -21,7 +21,7 @@ export function createAndAppendTiles(container: Element, numberOfTiles: number, 
 }
 
 // Tile factory
-export function TileFactory(type: string) {
+function TileFactory(type: string) {
   if (type === 'number') {
     return new NumberTile();
   }
