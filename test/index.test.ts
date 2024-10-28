@@ -7,7 +7,6 @@ describe("NumberTile Generator Function Tests", () => {
 
   beforeAll(() => {
     tile = new NumberTile();
-    document.body.appendChild(tile);
   });
 
   it("generates a tile instance", () => {
@@ -17,9 +16,8 @@ describe("NumberTile Generator Function Tests", () => {
 
   it("has each required value", () => {
     for (let i = 0; i < 5; i++) {
-      document.body.removeChild(tile);
       tile = new NumberTile();
-      document.body.appendChild(tile);
+      tile.connectedCallback();
       expect(tile).toBeTruthy();
       expect(tile.dataset.value).toBeTruthy();
       expect(tile.getDataValueAsNumber()).toBeGreaterThan(0);
@@ -35,6 +33,7 @@ describe('OperatorTile Generator Tests', () => {
 
   beforeAll(() => {
     tile = new OperatorTile();
+    document.body.appendChild(tile);
   })
 
   it('creates a tile instance', () => {
@@ -47,6 +46,7 @@ describe('OperatorTile Generator Tests', () => {
 
     for (let i = 0; i < 10; i++) {
       tile = new OperatorTile();
+      tile.connectedCallback();
       expect(operators).toContain(tile.dataset.operator);
     }
   })
