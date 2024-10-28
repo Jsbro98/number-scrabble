@@ -1,3 +1,5 @@
+import { NumberTile, OperatorTile } from "./tile";
+
 /*
 
 todo list:
@@ -5,25 +7,15 @@ todo list:
 TODO create equals sign tile
 TODO create drag n drop to return tile back to container
 TODO create custom classes for:
-  - NumberTile
   - OperatorTile
   - EqualsTile
 
 */
 
-
-import { NumberTile } from "./tile";
-
-// Tile Type
-
-export type OperatorTile = {
-  element: Element;
-  operator: string;
-};
-
 // used for drag n drop
 // TODO remove from global scope
 let dragElem: Element | null = null;
+
 
 // ########################################################################
 // ########################################################################
@@ -49,6 +41,7 @@ main();
 // ########################################################################
 // ########################################################################
 
+
 // Random number generator
 export function getRandomNumber(max: number): number {
   return Math.floor(Math.random() * (max) + 1);
@@ -58,43 +51,22 @@ export function getRandomNumber(max: number): number {
 function createAndAppendTiles(container: Element, numberOfTiles: number, type: string): void {
   for (let i = 0; i < numberOfTiles; i++) {
 
-    // TODO fix this to have OperatorTile return Element here
     const element = TileFactory(type);
-    container.appendChild(element instanceof NumberTile ? element : element.element);
+    container.appendChild(element);
   }
 }
 
 // Tile factory
 export function TileFactory(type: string) {
   if (type === 'number') {
-    return generateNumberTile();
+    return new NumberTile();
   }
 
   if (type === 'operator') {
-    return generateOperatorTile();
+    return new OperatorTile();
   }
 
   throw new TypeError('type parameter is not valid');
-}
-
-// NumberTile Generator
-export function generateNumberTile(): NumberTile {
-  return new NumberTile();
-}
-
-// OperatorTile generator
-export function generateOperatorTile(): OperatorTile {
-  const operators: string[] = ['+', '-', '*', '/'];
-  const element = createTileElement();
-  const operatorValue = operators[getRandomNumber(operators.length) - 1];
-  element.textContent = operatorValue;
-
-  setTileDragEvent(element);
-
-  return {
-    element,
-    operator: operatorValue,
-  }
 }
 
 // Cell event logic
