@@ -1,13 +1,12 @@
-import { generateNumberTile, generateOperatorTile, OperatorTile } from '../src/typescript/index';
 import { EquationChecker } from '../src/typescript/equationChecker';
-import { NumberTile } from '../src/typescript/tile';
+import { NumberTile, OperatorTile } from '../src/typescript/tile';
 
 // NumberTile tests
 describe("NumberTile Generator Function Tests", () => {
   let tile: NumberTile;
 
   beforeAll(() => {
-    tile = generateNumberTile();
+    tile = new NumberTile();
     document.body.appendChild(tile);
   });
 
@@ -35,7 +34,7 @@ describe('OperatorTile Generator Tests', () => {
   const operators = ['+', '-', '*', '/'];
 
   beforeAll(() => {
-    tile = generateOperatorTile();
+    tile = new OperatorTile();
   })
 
   it('creates a tile instance', () => {
@@ -43,12 +42,12 @@ describe('OperatorTile Generator Tests', () => {
   })
 
   it('has the required OperatorTile values', () => {
-    expect(tile.element).toBeTruthy();
-    expect(tile.element).toBeInstanceOf(Element);
+    expect(tile).toBeTruthy();
+    expect(tile).toBeInstanceOf(Element);
 
     for (let i = 0; i < 10; i++) {
-      tile = generateOperatorTile();
-      expect(operators).toContain(tile.operator);
+      tile = new OperatorTile();
+      expect(operators).toContain(tile.dataset.operator);
     }
   })
 })
