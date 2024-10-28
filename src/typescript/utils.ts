@@ -78,5 +78,3 @@ export function setTileDragEvent(element: Element) {
     }
   });
 }
-
-export default { makeDragAndDropContainer, createAndAppendTiles };
