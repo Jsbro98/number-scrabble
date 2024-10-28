@@ -4,12 +4,9 @@ import { NumberTile, OperatorTile } from "./tile";
 
 todo list:
 
-TODO create equals sign tile
 TODO create drag n drop to return tile back to container
 TODO create custom classes for:
-  - OperatorTile
   - EqualsTile
-
 */
 
 // used for drag n drop
