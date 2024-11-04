@@ -16,7 +16,7 @@ body {
   margin-right: 5%;
 }
 
-.row {
+.column {
   display: flex;
   flex-direction: column;
   gap: 5px;
