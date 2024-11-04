@@ -4,7 +4,7 @@
   ##################################
 */
 
-import { NumberTile, OperatorTile } from "./tile";
+import { EqualsTile, NumberTile, OperatorTile } from "./tile";
 
 
 
@@ -28,6 +28,10 @@ function TileFactory(type: string) {
 
   if (type === 'operator') {
     return new OperatorTile();
+  }
+
+  if (type === 'equals') {
+    return new EqualsTile();
   }
 
   throw new TypeError('type parameter is not valid');
