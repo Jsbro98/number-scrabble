@@ -51,6 +51,7 @@ export const DragNDropManager = (() => {
       elem.addEventListener('drop', e => {
         if (!(e.target instanceof Element)) return;
         if (!(e.target.classList.contains('drag-target'))) return;
+        if (e.target.classList.contains('cell') && e.target.hasChildNodes()) return;
 
         e.preventDefault();
 

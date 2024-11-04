@@ -6,7 +6,6 @@ fixmes:
 
 todo list:
 TODO: create submit button for turn submition
-TODO: implement rule that cell can only contain one tile
 TODO: implement equals tile functionality
 
 */
