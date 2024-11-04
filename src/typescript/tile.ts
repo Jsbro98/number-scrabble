@@ -42,7 +42,7 @@ export class OperatorTile extends HTMLDivElement {
   }
 
   private getNewOperator(): string {
-    return this.OPERATORS[getRandomNumber(this.OPERATORS.length) - 1];
+    return this.OPERATORS[getRandomNumber(this.OPERATORS.length)];
   }
 }
 
