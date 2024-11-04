@@ -10,7 +10,7 @@ import { EqualsTile, NumberTile, OperatorTile } from "./tile";
 
 // Random number generator
 export function getRandomNumber(max: number): number {
-  return Math.floor(Math.random() * (max) + 1);
+  return Math.floor(Math.random() * (max));
 }
 
 // Create and Append tile function
