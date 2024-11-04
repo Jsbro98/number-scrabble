@@ -3,12 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <script>
-      // hack to get rid of 'exports not defined' error
-      var exports = {};
-    </script>
-    <script src="../dist/bundle.js" type="module" defer></script>
     <title>Number Scrabble</title>
   </head>
   <body>
@@ -17,6 +11,8 @@
       <div class="number-tile-container drag-target"></div>
       <div class="tile-title">Current Operator Tiles</div>
       <div class="operator-tile-container drag-target"></div>
+      <div class="tile-title">Current Equal Tiles</div>
+      <div class="equals-tile-container drag-target"></div>
     </div>
     <div class="grid-container">
       <div class="row 1">
