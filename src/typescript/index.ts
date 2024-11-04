@@ -20,13 +20,13 @@ function main(): void {
 
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector('.operator-tile-container');
-  const cells = document.querySelectorAll('.cell');
+  const gridContainer = document.querySelector('.grid-container');
 
-  if (numberTileContainer === null || operatorTileContainer === null || cells === null) {
+  if (numberTileContainer === null || operatorTileContainer === null || gridContainer === null) {
     throw new Error('one of the game container selectors returned null');
   }
 
-  DragNDropManager.makeDragAndDropContainer(numberTileContainer, operatorTileContainer, ...cells);
+  DragNDropManager.makeDragAndDropContainer(numberTileContainer, operatorTileContainer, gridContainer);
   createAndAppendTiles(numberTileContainer, 10, 'number');
   createAndAppendTiles(operatorTileContainer, 5, 'operator');
 }
