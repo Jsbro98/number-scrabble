@@ -1,13 +1,13 @@
 import { DragNDropManager, createAndAppendTiles } from './utils';
+import '../style.css';
 
 /*
 fixmes:
 
 todo list:
-
-TODO move all functions to their own file to avoid test import errors
-TODO create drag n drop to return tile back to container
-TODO create custom classes for:
+TODO: create submit button for turn submition
+TODO: implement equals tile functionality
+TODO: create custom classes for:
   - EqualsTile
 */
 
@@ -20,15 +20,27 @@ function main(): void {
 
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector('.operator-tile-container');
+  const equalsTileContainer = document.querySelector('.equals-tile-container');
   const gridContainer = document.querySelector('.grid-container');
 
-  if (numberTileContainer === null || operatorTileContainer === null || gridContainer === null) {
+  if (
+    numberTileContainer === null
+    || operatorTileContainer === null
+    || equalsTileContainer === null
+    || gridContainer === null
+  ) {
     throw new Error('one of the game container selectors returned null');
   }
 
-  DragNDropManager.makeDragAndDropContainer(numberTileContainer, operatorTileContainer, gridContainer);
+  DragNDropManager.makeDragAndDropContainer(
+    numberTileContainer,
+    operatorTileContainer,
+    gridContainer,
+    equalsTileContainer
+  );
   createAndAppendTiles(numberTileContainer, 10, 'number');
   createAndAppendTiles(operatorTileContainer, 5, 'operator');
+  createAndAppendTiles(equalsTileContainer, 3, 'equals');
 }
 
 main();
