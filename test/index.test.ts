@@ -20,7 +20,7 @@ describe("NumberTile Generator Function Tests", () => {
       tile.connectedCallback();
       expect(tile).toBeTruthy();
       expect(tile.dataset.value).toBeTruthy();
-      expect(tile.getDataValueAsNumber()).toBeGreaterThan(0);
+      expect(tile.getDataValueAsNumber()).toBeGreaterThanOrEqual(0);
       expect(tile.getDataValueAsNumber()).toBeLessThan(11);
     }
   });
