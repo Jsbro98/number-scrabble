@@ -7,6 +7,9 @@ fixmes:
 todo list:
 TODO: create submit button for turn submition
 TODO: implement equals tile functionality
+TODO: implement input tracking for simplification
+TODO: add slick to return to original container
+TODO: make it to where other tiles can't go to other containers
 
 */
 
@@ -37,6 +40,14 @@ function main(): void {
     gridContainer,
     equalsTileContainer
   );
+
+  gridContainer.addEventListener('drop', e => {
+    const elem = e.target as Element;
+    if (elem.classList.contains('cell')) {
+      console.log(elem.childNodes[0].textContent);
+    }
+  })
+
   createAndAppendTiles(numberTileContainer, 10, 'number');
   createAndAppendTiles(operatorTileContainer, 5, 'operator');
   createAndAppendTiles(equalsTileContainer, 3, 'equals');
