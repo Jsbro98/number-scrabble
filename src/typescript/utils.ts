@@ -64,8 +64,6 @@ export const DragNDropManager = (() => {
 
       // Allow drop
       elem.addEventListener('dragover', e => {
-        console.log('dragging...');
-        console.log({ dragElem, target: e.target });
         e.preventDefault();
       });
     })
@@ -75,11 +73,9 @@ export const DragNDropManager = (() => {
   // Draggable tile logic
   function setTileDragEvent(element: Element) {
     element.addEventListener('dragstart', e => {
-      console.log('dragStart');
 
       if (e.target instanceof Element) {
         dragElem = e.target;
-        console.log({ dragElem, target: e.target });
       }
     });
   }
