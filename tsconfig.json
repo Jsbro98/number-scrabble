@@ -22,7 +22,7 @@
   "exclude": [
     "test/**",
     "node_modules",
-    "babel.config.js",
+    "babel.config.cjs",
     "jest.config.mjs",
     "dist",
     "webpack.config.cjs"
