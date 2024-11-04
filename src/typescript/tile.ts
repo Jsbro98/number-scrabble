@@ -1,3 +1,4 @@
+import { EquationChecker } from './equationChecker';
 import { DragNDropManager, getRandomNumber } from './utils';
 
 export class NumberTile extends HTMLDivElement {
@@ -45,5 +46,22 @@ export class OperatorTile extends HTMLDivElement {
   }
 }
 
+export class EqualsTile extends HTMLDivElement {
+  public static eqChecker: EquationChecker = new EquationChecker();
+
+  constructor() {
+    super();
+    DragNDropManager.setTileDragEvent(this);
+  }
+
+  connectedCallback() {
+    this.setAttribute('is', 'equals-tile');
+    this.setAttribute('draggable', 'true');
+    this.classList.add("tile");
+    this.textContent = '=';
+  }
+}
+
+customElements.define('equals-tile', EqualsTile, { extends: 'div' });
 customElements.define('number-tile', NumberTile, { extends: 'div' });
 customElements.define('operator-tile', OperatorTile, { extends: 'div' });
