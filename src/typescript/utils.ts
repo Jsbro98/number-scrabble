@@ -49,11 +49,11 @@ export const DragNDropManager = (() => {
   function makeDragAndDropContainer(...elements: Element[]) {
     elements.forEach(elem => {
       elem.addEventListener('drop', e => {
+        e.preventDefault();
+
         if (!(e.target instanceof Element)) return;
         if (!(e.target.classList.contains('drag-target'))) return;
         if (e.target.classList.contains('cell') && e.target.hasChildNodes()) return;
-
-        e.preventDefault();
 
         if (dragElem) {
           dragElem.parentNode?.removeChild(dragElem);

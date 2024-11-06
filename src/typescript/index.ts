@@ -10,6 +10,8 @@ TODO: implement equals tile functionality
 TODO: implement input tracking for simplification
 TODO: add slick to return to original container
 TODO: make it to where other tiles can't go to other containers
+  - this should be implemented with dragElem, possibly split the logic apart
+  to avoid overcomplication
 
 */
 
