@@ -40,13 +40,6 @@ function main(): void {
     equalsTileContainer
   );
 
-  gridContainer.addEventListener('drop', e => {
-    const elem = e.target as Element;
-    if (elem.classList.contains('cell')) {
-      console.log(elem.childNodes[0].textContent);
-    }
-  })
-
   createAndAppendTiles(numberTileContainer, 10, 'number');
   createAndAppendTiles(operatorTileContainer, 5, 'operator');
   createAndAppendTiles(equalsTileContainer, 3, 'equals');
