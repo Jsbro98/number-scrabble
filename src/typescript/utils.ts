@@ -55,14 +55,14 @@ export const DragNDropManager = (() => {
         if (!(e.target.classList.contains('drag-target'))) return;
         if (e.target.classList.contains('cell') && e.target.hasChildNodes()) return;
 
-        if (dragElem) {
+        if (dragElem != null && checkIfDropIsAllowed(e, dragElem)) {
           dragElem.parentNode?.removeChild(dragElem);
           e.target.appendChild(dragElem);
           dragElem = null;
         }
       });
 
-      // Allow drop
+      // Allow drop within containers
       elem.addEventListener('dragover', e => {
         e.preventDefault();
       });
@@ -78,6 +78,40 @@ export const DragNDropManager = (() => {
         dragElem = e.target;
       }
     });
+  }
+
+  // helper object used only for checkIfDropIsAllowed
+  const dropAllowedHelper = {
+
+    dragElemIsMatchingContainerClass(target: Element, dragElement: Element): boolean {
+      const targetClassName = target.classList[0].split("-")[0];
+      const dragElemClassName = dragElement.getAttribute("is")?.split("-")[0];
+
+      return targetClassName === dragElemClassName;
+    },
+
+    containerContainsCell(container: Element): boolean {
+      return container.classList.contains('cell');
+    },
+
+    isATileContainer(elem: Element): boolean {
+      const className = elem.classList[0].split("-")[0];
+      return className.includes("number")
+        || className.includes("equals")
+        || className.includes("operator");
+    }
+  }
+
+  // private
+  function checkIfDropIsAllowed(event: Event, dragElem: Element): boolean {
+    if (!event.target) throw new Error('e.target is falsy!');
+
+    const target = event.target as Element;
+
+    if (dropAllowedHelper.containerContainsCell(target)) return true;
+    if (dropAllowedHelper.isATileContainer(target) && dropAllowedHelper.dragElemIsMatchingContainerClass(target, dragElem)) return true;
+
+    return false;
   }
 
   return { makeDragAndDropContainer, setTileDragEvent };
