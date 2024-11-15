@@ -52,7 +52,7 @@ export const DragNDropManager = (() => {
         e.preventDefault();
 
         if (!(e.target instanceof Element)) return;
-        if (!(e.target.classList.contains('drag-target'))) return;
+        if (!(e.target.classList.contains('drag-target')) && !(e.target.classList.contains('cell'))) return;
         if (e.target.classList.contains('cell') && e.target.hasChildNodes()) return;
 
         if (dragElem != null && checkIfDropIsAllowed(e, dragElem)) {
@@ -91,7 +91,7 @@ export const DragNDropManager = (() => {
     },
 
     containerContainsCell(container: Element): boolean {
-      return container.classList.contains('cell');
+      return container.classList.contains("cell");
     },
 
     isATileContainer(elem: Element): boolean {
