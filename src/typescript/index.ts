@@ -7,7 +7,8 @@ fixmes:
 todo list:
 TODO: create submit button for turn submition
 TODO: implement equals tile functionality
-TODO: implement input tracking for simplification
+TODO: implement input tracking for equals and submit
+  - Use a closure for the addEventListener function for grid-container?
 TODO: add click to return to original container
 
 */
