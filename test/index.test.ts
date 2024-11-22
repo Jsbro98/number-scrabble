@@ -2,19 +2,19 @@ import { EquationChecker } from '../src/typescript/equationChecker';
 import { NumberTile, OperatorTile } from '../src/typescript/tile';
 
 // NumberTile tests
-describe("NumberTile Generator Function Tests", () => {
+describe('NumberTile Generator Function Tests', () => {
   let tile: NumberTile;
 
   beforeAll(() => {
     tile = new NumberTile();
   });
 
-  it("generates a tile instance", () => {
+  it('generates a tile instance', () => {
     expect(tile).toBeTruthy();
     expect(tile).toBeInstanceOf(NumberTile);
   });
 
-  it("has each required value", () => {
+  it('has each required value', () => {
     for (let i = 0; i < 5; i++) {
       tile = new NumberTile();
       tile.connectedCallback();
@@ -34,11 +34,11 @@ describe('OperatorTile Generator Tests', () => {
   beforeAll(() => {
     tile = new OperatorTile();
     document.body.appendChild(tile);
-  })
+  });
 
   it('creates a tile instance', () => {
     expect(tile).toBeTruthy();
-  })
+  });
 
   it('has the required OperatorTile values', () => {
     expect(tile).toBeTruthy();
@@ -49,8 +49,8 @@ describe('OperatorTile Generator Tests', () => {
       tile.connectedCallback();
       expect(operators).toContain(tile.dataset.operator);
     }
-  })
-})
+  });
+});
 
 // EquationChecker tests
 
@@ -59,12 +59,12 @@ describe('EquationChecker Tests', () => {
 
   beforeAll(() => {
     ec = new EquationChecker();
-  })
+  });
   it('successfully creates an instance', () => {
     ec.setEquation({ leftSide: '5 + 5', rightSide: '25 * 9' });
     expect(ec).toBeDefined();
     expect(ec).toBeInstanceOf(EquationChecker);
-  })
+  });
 
   it('checks equations', () => {
     ec.setEquation({ leftSide: '10 * 25 + 500', rightSide: '5 - 1 / 4' });
@@ -72,5 +72,5 @@ describe('EquationChecker Tests', () => {
 
     ec.setEquation({ leftSide: '5 + 5', rightSide: '5 + 5' });
     expect(ec.checkEquation()).toBeTruthy();
-  })
-})
+  });
+});

@@ -20,7 +20,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
-
 }
 
 .cell {
@@ -45,7 +44,9 @@ body {
   gap: 15px;
 }
 
-.number-tile-container, .operator-tile-container, .equals-tile-container {
+.number-tile-container,
+.operator-tile-container,
+.equals-tile-container {
   display: flex;
   gap: 5px;
   border: lightgrey solid 2px;

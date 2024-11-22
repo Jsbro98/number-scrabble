@@ -14,7 +14,7 @@ export class NumberTile extends HTMLDivElement {
     this.setAttribute('data-value', this.numberValue.toString());
     this.setAttribute('is', 'number-tile');
     this.setAttribute('draggable', 'true');
-    this.classList.add("tile");
+    this.classList.add('tile');
     this.textContent = this.dataset.value?.toString()!;
   }
 
@@ -38,7 +38,7 @@ export class OperatorTile extends HTMLDivElement {
     this.setAttribute('data-operator', this.currentOperator);
     this.textContent = this.currentOperator;
     this.setAttribute('draggable', 'true');
-    this.classList.add("tile");
+    this.classList.add('tile');
   }
 
   private getNewOperator(): string {
@@ -57,7 +57,7 @@ export class EqualsTile extends HTMLDivElement {
   connectedCallback() {
     this.setAttribute('is', 'equals-tile');
     this.setAttribute('draggable', 'true');
-    this.classList.add("tile");
+    this.classList.add('tile');
     this.textContent = '=';
   }
 }

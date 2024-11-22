@@ -5,7 +5,7 @@ import { evaluate, MathExpression } from 'mathjs';
 export type Equation = {
   leftSide: string;
   rightSide: string;
-}
+};
 
 export class EquationChecker {
   private equation?: Equation;
@@ -51,8 +51,8 @@ export class EquationChecker {
     let left: string | false = this.isSideLengthOne(this.leftSide);
     let right: string | false = this.isSideLengthOne(this.rightSide);
 
-    let processedLeft: number = NaN
-    let processedRight: number = NaN
+    let processedLeft: number = NaN;
+    let processedRight: number = NaN;
 
     if (left && right) {
       return left === right;

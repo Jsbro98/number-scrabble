@@ -3,10 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "incremental": true,
-    "lib": [
-      "ES6",
-      "DOM",
-    ],
+    "lib": ["ES6", "DOM"],
     "allowJs": true,
     "strict": true,
     "outDir": "dist",
@@ -17,7 +14,7 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",
-    "sourceMap": true,
+    "sourceMap": true
   },
   "exclude": [
     "test/**",
