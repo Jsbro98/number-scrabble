@@ -1,5 +1,3 @@
-// TODO continue here
-
 import { evaluate, MathExpression } from 'mathjs';
 
 export type Equation = {
