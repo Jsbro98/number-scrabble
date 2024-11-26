@@ -1,4 +1,4 @@
-import { DragNDropManager, createAndAppendTiles } from './utils';
+import { DragNDropManager, createAndAppendTiles, GameGrid } from './utils';
 import '../style.css';
 
 /*
@@ -18,6 +18,40 @@ TODO: add click to return to original container
 // ---------- Main function ----------
 
 function main(): void {
+  const gameGrid: GameGrid = {
+    columns: [
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ],
+
+    getCell(row: number, index: number): string | null {
+      const returnValue = this.columns[row][index];
+
+      if (returnValue === '') return null;
+
+      return returnValue;
+    },
+
+    setCell(row: number, index: number, value: string) {
+      this.columns[row][index] = value;
+    },
+  };
+
+  DragNDropManager.setGameGrid(gameGrid);
+
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector(
     '.operator-tile-container'
