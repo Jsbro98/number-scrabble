@@ -1,5 +1,17 @@
 /*
   ##################################
+  Interfaces
+  ##################################
+*/
+
+export interface GameGrid {
+  columns: string[][];
+  getCell(row: number, index: number): string | null;
+  setCell(row: number, index: number, value: string): void;
+}
+
+/*
+  ##################################
   Helper functions used in index.ts
   ##################################
 */
@@ -42,6 +54,17 @@ function TileFactory(type: string) {
 export const DragNDropManager = (() => {
   // --- used for drag n drop functionality ---
   let dragElem: Element | null = null;
+
+  // --- used for grid data tracking ---
+  let grid: GameGrid;
+
+  function setGameGrid(setValue: GameGrid) {
+    grid = setValue;
+  }
+
+  function getGameGrid(): GameGrid {
+    return grid;
+  }
 
   // Drag n drop container enabler
   function makeDragAndDropContainer(...elements: Element[]) {
@@ -123,5 +146,10 @@ export const DragNDropManager = (() => {
     return false;
   }
 
-  return { makeDragAndDropContainer, setTileDragEvent };
+  return {
+    makeDragAndDropContainer,
+    setTileDragEvent,
+    setGameGrid,
+    getGameGrid,
+  };
 })();
