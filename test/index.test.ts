@@ -1,5 +1,6 @@
 import { EquationChecker } from '../src/typescript/equationChecker';
 import { NumberTile, OperatorTile } from '../src/typescript/tile';
+import { DragNDropManager, GameGrid } from '../src/typescript/utils';
 
 // NumberTile tests
 describe('NumberTile Generator Function Tests', () => {
@@ -72,5 +73,59 @@ describe('EquationChecker Tests', () => {
 
     ec.setEquation({ leftSide: '5 + 5', rightSide: '5 + 5' });
     expect(ec.checkEquation()).toBeTruthy();
+  });
+});
+
+// DragNDropManager tests
+
+describe('DragNDropManager & GameGrid tests', () => {
+  let testGrid: GameGrid;
+
+  beforeAll(() => {
+    testGrid = {
+      columns: [
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      ],
+
+      getCell(row: number, index: number): string | null {
+        const returnValue = this.columns[row][index];
+
+        if (returnValue === '') return null;
+
+        return returnValue;
+      },
+
+      setCell(row: number, index: number, value: string) {
+        this.columns[row][index] = value;
+      },
+    };
+  });
+
+  describe('DragNDropManager', () => {
+    it('sets a grid', () => {
+      DragNDropManager.setGameGrid(testGrid);
+      expect(DragNDropManager.getGameGrid).toBeTruthy();
+    });
+  });
+
+  describe('GameGrid', () => {
+    it('GameGrid sets a value', () => {
+      testGrid.setCell(1, 1, 'Hello, World!');
+      expect(testGrid.columns[1][1]).toBe('Hello, World!');
+    });
   });
 });
