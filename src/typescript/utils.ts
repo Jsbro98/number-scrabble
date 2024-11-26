@@ -66,6 +66,7 @@ export const DragNDropManager = (() => {
     return grid;
   }
 
+  // TODO continue here for gameGrid additions
   // Drag n drop container enabler
   function makeDragAndDropContainer(...elements: Element[]) {
     elements.forEach((elem) => {
