@@ -5,9 +5,10 @@
 */
 
 export interface GameGrid {
-  columns: string[][];
+  rows: string[][];
   getCell(row: number, index: number): string | null;
   setCell(row: number, index: number, value: string): void;
+  removeCell(row: number, index: number): void;
 }
 
 /*
@@ -66,7 +67,34 @@ export const DragNDropManager = (() => {
     return grid;
   }
 
-  // TODO continue here for gameGrid additions
+  // helper object used only for checkIfDropIsAllowed
+  const dropAllowedHelper = {
+    dragElemIsMatchingContainerClass(
+      target: Element,
+      dragElement: Element
+    ): boolean {
+      const targetClassName = target.classList[0].split('-')[0];
+      const dragElemClassName = dragElement.getAttribute('is')?.split('-')[0];
+
+      return targetClassName === dragElemClassName;
+    },
+
+    containerContainsCell(container: Element): boolean {
+      return container.classList.contains('cell');
+    },
+
+    isATileContainer(elem: Element): boolean {
+      const className = elem.classList[0].split('-')[0];
+      return (
+        className.includes('number') ||
+        className.includes('equals') ||
+        className.includes('operator')
+      );
+    },
+  };
+
+  // ##### DragNDropManager Functions #####
+
   // Drag n drop container enabler
   function makeDragAndDropContainer(...elements: Element[]) {
     elements.forEach((elem) => {
@@ -101,35 +129,32 @@ export const DragNDropManager = (() => {
     element.addEventListener('dragstart', (e) => {
       if (e.target instanceof Element) {
         dragElem = e.target;
+
+        if (!dropAllowedHelper.containerContainsCell(e.target.parentElement!)) {
+          return;
+        }
       }
+
+      const [row, column] = getCellPositionAndValue(e, true);
+      grid.removeCell(row, column);
+    });
+
+    element.addEventListener('dragend', (e) => {
+      if (e.target instanceof Element) {
+        if (!dropAllowedHelper.containerContainsCell(e.target.parentElement!)) {
+          return;
+        }
+      }
+      const [row, column, value] = getCellPositionAndValue(e, false);
+      if (value) {
+        grid.setCell(row, column, value);
+      } else {
+        throw new Error('value is undefined in getCellPositionAndValue');
+      }
+
+      console.log(grid);
     });
   }
-
-  // helper object used only for checkIfDropIsAllowed
-  const dropAllowedHelper = {
-    dragElemIsMatchingContainerClass(
-      target: Element,
-      dragElement: Element
-    ): boolean {
-      const targetClassName = target.classList[0].split('-')[0];
-      const dragElemClassName = dragElement.getAttribute('is')?.split('-')[0];
-
-      return targetClassName === dragElemClassName;
-    },
-
-    containerContainsCell(container: Element): boolean {
-      return container.classList.contains('cell');
-    },
-
-    isATileContainer(elem: Element): boolean {
-      const className = elem.classList[0].split('-')[0];
-      return (
-        className.includes('number') ||
-        className.includes('equals') ||
-        className.includes('operator')
-      );
-    },
-  };
 
   // private
   function checkIfDropIsAllowed(event: Event, dragElem: Element): boolean {
@@ -147,6 +172,29 @@ export const DragNDropManager = (() => {
     return false;
   }
 
+  // private
+  function getCellPositionAndValue(
+    e: Event,
+    removal: boolean
+  ): [number, number] | [number, number, string] {
+    const tile = e.target as Element;
+    const cell = tile.parentElement!;
+
+    const text: string = tile.textContent!;
+    const column: number = Number(cell.parentElement?.classList[1]) - 1;
+    const row: number = (() => {
+      const columnChildren = cell.parentNode?.children;
+      return Array.prototype.indexOf.call(columnChildren, cell);
+    })();
+
+    if (removal) {
+      return [row, column];
+    }
+
+    return [row, column, text];
+  }
+
+  // ##### DragNDrop public functions #####
   return {
     makeDragAndDropContainer,
     setTileDragEvent,
