@@ -19,7 +19,7 @@ TODO: add click to return to original container
 
 function main(): void {
   const gameGrid: GameGrid = {
-    columns: [
+    rows: [
       ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -38,7 +38,7 @@ function main(): void {
     ],
 
     getCell(row: number, index: number): string | null {
-      const returnValue = this.columns[row][index];
+      const returnValue = this.rows[row][index];
 
       if (returnValue === '') return null;
 
@@ -46,7 +46,11 @@ function main(): void {
     },
 
     setCell(row: number, index: number, value: string) {
-      this.columns[row][index] = value;
+      this.rows[row][index] = value;
+    },
+
+    removeCell(row: number, index: number) {
+      this.rows[row][index] = '';
     },
   };
 
