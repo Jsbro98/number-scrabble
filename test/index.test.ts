@@ -83,7 +83,7 @@ describe('DragNDropManager & GameGrid tests', () => {
 
   beforeAll(() => {
     testGrid = {
-      columns: [
+      rows: [
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -102,7 +102,7 @@ describe('DragNDropManager & GameGrid tests', () => {
       ],
 
       getCell(row: number, index: number): string | null {
-        const returnValue = this.columns[row][index];
+        const returnValue = this.rows[row][index];
 
         if (returnValue === '') return null;
 
@@ -110,7 +110,11 @@ describe('DragNDropManager & GameGrid tests', () => {
       },
 
       setCell(row: number, index: number, value: string) {
-        this.columns[row][index] = value;
+        this.rows[row][index] = value;
+      },
+
+      removeCell(row: number, index: number) {
+        this.rows[row][index] = '';
       },
     };
   });
@@ -123,9 +127,15 @@ describe('DragNDropManager & GameGrid tests', () => {
   });
 
   describe('GameGrid', () => {
-    it('GameGrid sets a value', () => {
+    it('sets a value', () => {
       testGrid.setCell(1, 1, 'Hello, World!');
-      expect(testGrid.columns[1][1]).toBe('Hello, World!');
+      expect(testGrid.getCell(1, 1)).toBe('Hello, World!');
+    });
+
+    it('removes a value', () => {
+      testGrid.setCell(1, 1, 'Hello, World!');
+      testGrid.removeCell(1, 1);
+      expect(testGrid.getCell(1, 1)).toBeNull();
     });
   });
 });
