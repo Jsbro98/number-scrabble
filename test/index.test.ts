@@ -101,6 +101,8 @@ describe('DragNDropManager & GameGrid tests', () => {
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       ],
 
+      lastTenMoves: [],
+
       getCell(row: number, index: number): string | null {
         const returnValue = this.rows[row][index];
 
@@ -111,10 +113,21 @@ describe('DragNDropManager & GameGrid tests', () => {
 
       setCell(row: number, index: number, value: string) {
         this.rows[row][index] = value;
+        this.lastTenMoves.push({ position: [row, index], value });
+
+        if (this.lastTenMoves.length > 10) {
+          this.lastTenMoves.shift();
+        }
       },
 
       removeCell(row: number, index: number) {
         this.rows[row][index] = '';
+        for (let move of this.lastTenMoves) {
+          if (move.position[0] === row && move.position[1] === index) {
+            const index = this.lastTenMoves.indexOf(move);
+            this.lastTenMoves.splice(index, 1);
+          }
+        }
       },
     };
   });
@@ -136,6 +149,16 @@ describe('DragNDropManager & GameGrid tests', () => {
       testGrid.setCell(1, 1, 'Hello, World!');
       testGrid.removeCell(1, 1);
       expect(testGrid.getCell(1, 1)).toBeNull();
+    });
+
+    it('adds items to last ten moves', () => {
+      const testArr = testGrid.lastTenMoves;
+      testGrid.setCell(10, 10, 'BEEP');
+      testArr.shift();
+      expect(testArr.length).toBe(1);
+      expect(testArr[0]).toBeDefined();
+      expect(testArr[0].position).toStrictEqual([10, 10]);
+      expect(testArr[0].value).toBe('BEEP');
     });
   });
 });
