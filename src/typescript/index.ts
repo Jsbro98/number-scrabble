@@ -11,6 +11,8 @@ TODO: implement input tracking for equals and submit
   - Use a closure for the addEventListener function for grid-container?
 TODO: add click to return to original container
 
+12/7 - use lastplacedEquals and lastTenMoves to implement functionality listed above
+
 */
 
 // ########################################################################
