@@ -6,9 +6,15 @@
 
 export interface GameGrid {
   rows: string[][];
+  lastTenMoves: GameMove[];
   getCell(row: number, index: number): string | null;
   setCell(row: number, index: number, value: string): void;
   removeCell(row: number, index: number): void;
+}
+
+export interface GameMove {
+  position: [number, number];
+  value: string;
 }
 
 /*
@@ -56,6 +62,9 @@ export const DragNDropManager = (() => {
   // --- used for drag n drop functionality ---
   let dragElem: Element | null = null;
 
+  // --- used to keep track of last placed equals tile ---
+  let lastPlacedEqualsTile: EqualsTile;
+
   // --- used for grid data tracking ---
   let grid: GameGrid;
 
@@ -65,6 +74,10 @@ export const DragNDropManager = (() => {
 
   function getGameGrid(): GameGrid {
     return grid;
+  }
+
+  function getLastPlacedEquals(): EqualsTile {
+    return lastPlacedEqualsTile;
   }
 
   // helper object used only for checkIfDropIsAllowed
@@ -151,8 +164,10 @@ export const DragNDropManager = (() => {
       } else {
         throw new Error('value is undefined in getCellPositionAndValue');
       }
-
-      console.log(grid);
+      console.log(e.target instanceof EqualsTile);
+      if (e.target instanceof EqualsTile) {
+        lastPlacedEqualsTile = e.target;
+      }
     });
   }
 
