@@ -1,5 +1,4 @@
-import { EquationChecker } from './equationChecker';
-import { DragNDropManager, getRandomNumber } from './utils';
+import { CellPosition, DragNDropManager, getRandomNumber } from './utils';
 
 export class NumberTile extends HTMLDivElement {
   private numberValue: number;
@@ -47,7 +46,7 @@ export class OperatorTile extends HTMLDivElement {
 }
 
 export class EqualsTile extends HTMLDivElement {
-  public static eqChecker: EquationChecker = new EquationChecker();
+  private tilePosition!: CellPosition;
 
   constructor() {
     super();
@@ -59,6 +58,13 @@ export class EqualsTile extends HTMLDivElement {
     this.setAttribute('draggable', 'true');
     this.classList.add('tile');
     this.textContent = '=';
+  }
+
+  get position(): CellPosition {
+    return this.tilePosition;
+  }
+  set position(value: CellPosition) {
+    this.tilePosition = value;
   }
 }
 
