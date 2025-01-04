@@ -1,17 +1,20 @@
-import { DragNDropManager, createAndAppendTiles, GameGrid } from './utils';
+import {
+  DragNDropManager,
+  createAndAppendTiles,
+  GameGrid,
+  checkEquality,
+} from './utils';
 import '../style.css';
 
 /*
 fixmes:
 
 todo list:
-TODO: create submit button for turn submition
-TODO: implement equals tile functionality
-TODO: implement input tracking for equals and submit
-  - Use a closure for the addEventListener function for grid-container?
-TODO: add click to return to original container
 
-12/7 - use lastplacedEquals and lastTenMoves to implement functionality listed above
+TODO: add double click to return to original container
+TODO: change game to better denominations (5s, 2s, or 1s)
+
+
 
 */
 
@@ -20,6 +23,7 @@ TODO: add click to return to original container
 // ---------- Main function ----------
 
 function main(): void {
+  // Main game grid
   const gameGrid: GameGrid = {
     rows: [
       ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -42,6 +46,8 @@ function main(): void {
     lastTenMoves: [],
 
     getCell(row: number, index: number): string | null {
+      if (row < 0 || row > 14 || index < 0 || index > 14) return null;
+
       const returnValue = this.rows[row][index];
 
       if (returnValue === '') return null;
@@ -69,23 +75,33 @@ function main(): void {
     },
   };
 
-  DragNDropManager.setGameGrid(gameGrid);
-
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector(
     '.operator-tile-container'
   );
   const equalsTileContainer = document.querySelector('.equals-tile-container');
   const gridContainer = document.querySelector('.grid-container');
+  const submitButton = document.querySelector('.submit-move');
 
   if (
     numberTileContainer === null ||
     operatorTileContainer === null ||
     equalsTileContainer === null ||
-    gridContainer === null
+    gridContainer === null ||
+    submitButton === null
   ) {
     throw new Error('one of the game container selectors returned null');
   }
+
+  submitButton.addEventListener('click', () => {
+    const currentEquals = DragNDropManager.getLastPlacedEquals();
+
+    if (currentEquals) {
+      console.log(checkEquality(currentEquals));
+    }
+  });
+
+  DragNDropManager.setGameGrid(gameGrid);
 
   DragNDropManager.makeDragAndDropContainer(
     numberTileContainer,
@@ -94,9 +110,9 @@ function main(): void {
     equalsTileContainer
   );
 
-  createAndAppendTiles(numberTileContainer, 10, 'number');
-  createAndAppendTiles(operatorTileContainer, 5, 'operator');
-  createAndAppendTiles(equalsTileContainer, 3, 'equals');
+  createAndAppendTiles(numberTileContainer, 20, 'number');
+  createAndAppendTiles(operatorTileContainer, 10, 'operator');
+  createAndAppendTiles(equalsTileContainer, 5, 'equals');
 }
 
 main();
