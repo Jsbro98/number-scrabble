@@ -1,7 +1,21 @@
+import { EqualsTile, NumberTile, OperatorTile } from './tile';
+import { Equation, EquationChecker } from './equationChecker';
+
 /*
-  ##################################
-  Interfaces
-  ##################################
+  ####################################################
+                      Types
+  ####################################################
+*/
+
+export type CellPosition = {
+  row: number;
+  column: number;
+};
+
+/*
+  ####################################################
+                      Interfaces
+  ####################################################
 */
 
 export interface GameGrid {
@@ -18,52 +32,17 @@ export interface GameMove {
 }
 
 /*
-  ##################################
-  Helper functions used in index.ts
-  ##################################
+  ####################################################
+      Main drag n drop functionality object
+  ####################################################
 */
-
-import { EqualsTile, NumberTile, OperatorTile } from './tile';
-
-// Random number generator
-export function getRandomNumber(max: number): number {
-  return Math.floor(Math.random() * max);
-}
-
-// Create and Append tile function
-export function createAndAppendTiles(
-  container: Element,
-  numberOfTiles: number,
-  type: string
-): void {
-  for (let i = 0; i < numberOfTiles; i++) {
-    container.appendChild(TileFactory(type));
-  }
-}
-
-// Tile factory
-function TileFactory(type: string) {
-  if (type === 'number') {
-    return new NumberTile();
-  }
-
-  if (type === 'operator') {
-    return new OperatorTile();
-  }
-
-  if (type === 'equals') {
-    return new EqualsTile();
-  }
-
-  throw new TypeError('type parameter is not valid');
-}
 
 export const DragNDropManager = (() => {
   // --- used for drag n drop functionality ---
   let dragElem: Element | null = null;
 
   // --- used to keep track of last placed equals tile ---
-  let lastPlacedEqualsTile: EqualsTile;
+  let lastPlacedEqualsTile: EqualsTile | null = null;
 
   // --- used for grid data tracking ---
   let grid: GameGrid;
@@ -76,7 +55,7 @@ export const DragNDropManager = (() => {
     return grid;
   }
 
-  function getLastPlacedEquals(): EqualsTile {
+  function getLastPlacedEquals(): EqualsTile | null {
     return lastPlacedEqualsTile;
   }
 
@@ -158,15 +137,16 @@ export const DragNDropManager = (() => {
           return;
         }
       }
-      const [row, column, value] = getCellPositionAndValue(e, false);
+      const [row, column, value] = getCellPositionAndValue(e, true);
       if (value) {
         grid.setCell(row, column, value);
       } else {
         throw new Error('value is undefined in getCellPositionAndValue');
       }
-      console.log(e.target instanceof EqualsTile);
       if (e.target instanceof EqualsTile) {
         lastPlacedEqualsTile = e.target;
+        const [row, column] = getCellPositionAndValue(e);
+        lastPlacedEqualsTile.position = { row, column };
       }
     });
   }
@@ -187,33 +167,181 @@ export const DragNDropManager = (() => {
     return false;
   }
 
-  // private
-  function getCellPositionAndValue(
-    e: Event,
-    removal: boolean
-  ): [number, number] | [number, number, string] {
-    const tile = e.target as Element;
-    const cell = tile.parentElement!;
-
-    const text: string = tile.textContent!;
-    const column: number = Number(cell.parentElement?.classList[1]) - 1;
-    const row: number = (() => {
-      const columnChildren = cell.parentNode?.children;
-      return Array.prototype.indexOf.call(columnChildren, cell);
-    })();
-
-    if (removal) {
-      return [row, column];
-    }
-
-    return [row, column, text];
-  }
-
   // ##### DragNDrop public functions #####
   return {
     makeDragAndDropContainer,
     setTileDragEvent,
     setGameGrid,
     getGameGrid,
+    getLastPlacedEquals,
   };
 })();
+
+/*
+  ####################################################
+          Helper functions used in index.ts
+  ####################################################
+*/
+
+// Random number generator
+export function getRandomNumber(max: number): number {
+  return Math.floor(Math.random() * max);
+}
+
+// Create and Append tile function
+export function createAndAppendTiles(
+  container: Element,
+  numberOfTiles: number,
+  type: string
+): void {
+  for (let i = 0; i < numberOfTiles; i++) {
+    container.appendChild(TileFactory(type));
+  }
+}
+
+// Tile factory
+function TileFactory(type: string) {
+  if (type === 'number') {
+    return new NumberTile();
+  }
+
+  if (type === 'operator') {
+    return new OperatorTile();
+  }
+
+  if (type === 'equals') {
+    return new EqualsTile();
+  }
+
+  throw new TypeError('type parameter is not valid');
+}
+
+function getCellPositionAndValue(
+  e: Event,
+  includeValue: boolean = false
+): [number, number] | [number, number, string] {
+  const tile = e.target as Element;
+  const cell = tile.parentElement!;
+
+  const text: string = tile.textContent!;
+  const column: number = Number(cell.parentElement?.classList[1]) - 1;
+  const row: number = (() => {
+    const columnChildren = cell.parentNode?.children;
+    return Array.prototype.indexOf.call(columnChildren, cell);
+  })();
+
+  if (includeValue) {
+    return [row, column, text];
+  }
+
+  return [row, column];
+}
+
+// ##### function for gameGrid equation checking checking #####
+
+export function checkEquality(equalsTile: EqualsTile): boolean {
+  const grid = DragNDropManager.getGameGrid();
+  const equationChecker: EquationChecker = new EquationChecker();
+  const row = equalsTile.position.row;
+  const column = equalsTile.position.column;
+
+  const upDown = traverseUpDown(row, column);
+  const leftRight = traverseLeftRight(row, column);
+
+  let leftRightEval: boolean = false;
+  let upDownEval: boolean = false;
+
+  if (leftRight) {
+    equationChecker.setEquation(leftRight);
+    leftRightEval = equationChecker.checkEquation();
+  }
+
+  if (upDown) {
+    equationChecker.setEquation(upDown);
+    upDownEval = equationChecker.checkEquation();
+  }
+
+  if (upDown && leftRight) {
+    return leftRightEval && upDownEval;
+  }
+
+  if (upDown && leftRight === null) {
+    return upDownEval;
+  }
+
+  if (upDown === null && leftRight) {
+    return leftRightEval;
+  }
+
+  console.log('Error evaluating equality in "checkEquality" in utils.ts');
+  return false;
+
+  // helper functions for grid traversal
+  function traverseUpDown(row: number, column: number): Equation | null {
+    const leftSide = [];
+    const rightSide = [];
+    let currentRow = row;
+    let currentColumn = column;
+
+    let above = grid.getCell(++currentRow, currentColumn);
+
+    if (above === null) {
+      return null;
+    }
+
+    while (above) {
+      leftSide.push(above);
+      above = grid.getCell(++currentRow, currentColumn);
+    }
+
+    // reset values before loop
+    [currentRow, currentColumn] = [row, column];
+
+    let below = grid.getCell(--currentRow, currentColumn);
+
+    if (below === null) {
+      return null;
+    }
+
+    while (below) {
+      rightSide.unshift(below);
+      below = grid.getCell(--currentRow, column);
+    }
+
+    return { leftSide: leftSide.join(' '), rightSide: rightSide.join(' ') };
+  }
+
+  function traverseLeftRight(row: number, column: number): Equation | null {
+    const leftSide = [];
+    const rightSide = [];
+    let currentRow = row;
+    let currentColumn = column;
+
+    let left = grid.getCell(currentRow, --currentColumn);
+
+    if (left === null) {
+      return null;
+    }
+
+    while (left) {
+      leftSide.unshift(left);
+      left = grid.getCell(currentRow, --currentColumn);
+    }
+
+    // reset values before loop
+    [currentRow, currentColumn] = [row, column];
+
+    let right = grid.getCell(currentRow, ++currentColumn);
+
+    if (right === null) {
+      return null;
+    }
+
+    while (right) {
+      rightSide.push(right);
+      right = grid.getCell(currentRow, ++currentColumn);
+    }
+
+    return { leftSide: leftSide.join(' '), rightSide: rightSide.join(' ') };
+  }
+}
