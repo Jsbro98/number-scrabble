@@ -6,16 +6,7 @@ export type Equation = {
 };
 
 export class EquationChecker {
-  private equation?: Equation;
-
-  constructor();
-  constructor(eq: Equation);
-
-  constructor(eq?: Equation) {
-    if (eq) {
-      this.setEquation(eq);
-    }
-  }
+  private equation!: Equation;
 
   private get hasEquation(): boolean {
     return this.equation !== undefined;
@@ -37,38 +28,35 @@ export class EquationChecker {
     return this.equation!.rightSide!;
   }
 
-  private isSideLengthOne(side: string): string | false {
+  private isSideLengthOne(side: string): number | false {
     if (side.length === 1 && !isNaN(Number(side))) {
-      return side;
+      return Number(side);
     }
 
     return false;
   }
 
   checkEquation(): boolean {
-    let left: string | false = this.isSideLengthOne(this.leftSide);
-    let right: string | false = this.isSideLengthOne(this.rightSide);
-
-    let processedLeft: number = NaN;
-    let processedRight: number = NaN;
+    let left: number | false = this.isSideLengthOne(this.leftSide);
+    let right: number | false = this.isSideLengthOne(this.rightSide);
 
     if (left && right) {
       return left === right;
     }
 
     if (!left) {
-      processedLeft = evaluate(this.leftSide as MathExpression);
+      left = evaluate(this.leftSide as MathExpression) as number;
     }
 
     if (!right) {
-      processedRight = evaluate(this.rightSide as MathExpression);
+      right = evaluate(this.rightSide as MathExpression) as number;
     }
 
-    if (isNaN(processedLeft) || isNaN(processedRight)) {
+    if (isNaN(left) || isNaN(right)) {
       throw new Error('Error evaluating in EquationChecker');
     }
 
-    return processedLeft === processedRight;
+    return left === right;
   }
 
   setEquation(eq: Equation) {
