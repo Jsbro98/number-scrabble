@@ -13,6 +13,7 @@ todo list:
 
 TODO: add double click to return to original container
 TODO: change game to better denominations (5s, 2s, or 1s)
+TODO: test and possibly fix when equations touch
 
 
 
