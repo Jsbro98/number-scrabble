@@ -41,6 +41,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 30%;
+  height: 50%;
   gap: 15px;
 }
 
@@ -51,6 +52,8 @@ body {
   gap: 5px;
   border: lightgrey solid 2px;
   padding: 10px;
+  flex: 1;
+  flex-wrap: wrap;
 }
 
 .tile {
