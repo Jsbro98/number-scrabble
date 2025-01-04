@@ -10,6 +10,9 @@ tsconfig.tsbuildinfo
 # compiled js
 dist
 
+# coverage
+coverage
+
 # vscode folder
 .vscode
 
