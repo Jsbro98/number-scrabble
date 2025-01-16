@@ -1,6 +1,10 @@
 import { EquationChecker } from '../src/typescript/equationChecker';
 import { NumberTile, OperatorTile } from '../src/typescript/tile';
-import { DragNDropManager, GameGrid } from '../src/typescript/utils';
+import {
+  DragNDropManager,
+  GameGrid,
+  GameGridFactory,
+} from '../src/typescript/utils';
 
 // NumberTile tests
 describe('NumberTile Generator Function Tests', () => {
@@ -82,54 +86,7 @@ describe('DragNDropManager & GameGrid tests', () => {
   let testGrid: GameGrid;
 
   beforeAll(() => {
-    testGrid = {
-      rows: [
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      ],
-
-      lastTenMoves: [],
-
-      getCell(row: number, index: number): string | null {
-        const returnValue = this.rows[row][index];
-
-        if (returnValue === '') return null;
-
-        return returnValue;
-      },
-
-      setCell(row: number, index: number, value: string) {
-        this.rows[row][index] = value;
-        this.lastTenMoves.push({ position: [row, index], value });
-
-        if (this.lastTenMoves.length > 10) {
-          this.lastTenMoves.shift();
-        }
-      },
-
-      removeCell(row: number, index: number) {
-        this.rows[row][index] = '';
-        for (let move of this.lastTenMoves) {
-          if (move.position[0] === row && move.position[1] === index) {
-            const index = this.lastTenMoves.indexOf(move);
-            this.lastTenMoves.splice(index, 1);
-          }
-        }
-      },
-    };
+    testGrid = GameGridFactory();
   });
 
   describe('DragNDropManager', () => {
