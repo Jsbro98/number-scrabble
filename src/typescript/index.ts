@@ -67,8 +67,8 @@ function main(): void {
     equalsTileContainer
   );
 
-  createAndAppendTiles(numberTileContainer, 20, 'number');
-  createAndAppendTiles(operatorTileContainer, 10, 'operator');
+  createAndAppendTiles(numberTileContainer, 30, 'number');
+  createAndAppendTiles(operatorTileContainer, 20, 'operator');
   createAndAppendTiles(equalsTileContainer, 5, 'equals');
 }
 
