@@ -23,6 +23,7 @@
     "jest.config.mjs",
     "dist",
     "webpack.config.cjs",
-    "coverage"
+    "coverage",
+    "eslint.config.js"
   ]
 }
