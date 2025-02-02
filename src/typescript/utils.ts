@@ -1,3 +1,5 @@
+import { evaluate } from 'mathjs';
+import { MovableGridCell } from './movableGridCell';
 import { EqualsTile, NumberTile, OperatorTile } from './tile';
 
 /*
@@ -304,4 +306,97 @@ function getCellPositionAndValue(
   }
 
   return [row, column];
+}
+
+// ##### function for gameGrid equation checking checking #####
+
+export function checkEquality(equalsTile: EqualsTile): boolean {
+  const grid = DragNDropManager.getGameGrid();
+  const row = equalsTile.position.row;
+  const column = equalsTile.position.column;
+
+  // used to see if upDown or leftRight will be used
+  let skipLeftRight = false;
+  let skipUpDown = false;
+
+  // used for easy grid movement
+  const gridCell: MovableGridCell = new MovableGridCell(grid, row, column);
+
+  if (gridCell.left === null || gridCell.right === null) skipLeftRight = true;
+  if (gridCell.up === null || gridCell.down === null) skipUpDown = true;
+
+  // respective left & right/up & down grid references
+  const leftRight = ['='];
+  const upDown = ['='];
+
+  if (skipLeftRight != true) {
+    while (gridCell.left) {
+      gridCell.moveCell(Movement.left);
+
+      if (gridCell.current === null) break;
+
+      leftRight.unshift(gridCell.current);
+    }
+
+    gridCell.resetGridValues();
+
+    while (gridCell.right) {
+      gridCell.moveCell(Movement.right);
+
+      if (gridCell.current === null) break;
+
+      leftRight.push(gridCell.current);
+    }
+
+    // get grid ready for possible up & down traversal
+    gridCell.resetGridValues();
+  }
+
+  if (skipUpDown != true) {
+    while (gridCell.up) {
+      gridCell.moveCell(Movement.up);
+
+      if (gridCell.current === null) break;
+
+      upDown.unshift(gridCell.current);
+    }
+
+    gridCell.resetGridValues();
+
+    while (gridCell.down) {
+      gridCell.moveCell(Movement.down);
+
+      if (gridCell.current === null) break;
+
+      upDown.push(gridCell.current);
+    }
+
+    gridCell.resetGridValues();
+  }
+
+  // used for final return values
+  let leftRightEval: boolean;
+  let upDownEval: boolean;
+
+  if (skipLeftRight != true) {
+    leftRightEval = leftRight
+      .join('')
+      .split('=')
+      .map((expression) => evaluate(expression))
+      .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
+  }
+
+  if (skipUpDown != true) {
+    upDownEval = upDown
+      .join('')
+      .split('=')
+      .map((expression) => evaluate(expression))
+      .every((val, _, arr) => val === arr[0]);
+  }
+
+  if (skipLeftRight) return upDownEval!;
+  if (skipUpDown) return leftRightEval!;
+  if (!skipUpDown && !skipLeftRight) return upDownEval! && leftRightEval!;
+
+  return false;
 }
