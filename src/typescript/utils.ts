@@ -119,7 +119,7 @@ export const DragNDropManager = (() => {
         if (e.target.classList.contains('cell') && e.target.hasChildNodes())
           return;
 
-        if (dragElem != null && checkIfDropIsAllowed(e, dragElem)) {
+        if (dragElem !== null && checkIfDropIsAllowed(e, dragElem)) {
           dragElem.parentNode?.removeChild(dragElem);
           e.target.appendChild(dragElem);
           dragElem = null;
@@ -147,6 +147,16 @@ export const DragNDropManager = (() => {
 
       const [row, column] = getCellPositionAndValue(e, true);
       grid.removeCell(row, column);
+
+      if (e.target instanceof EqualsTile) {
+        const equalsIndex = equalsTiles.findIndex(
+          (tile) => tile.position.row === row && tile.position.column === column
+        );
+
+        if (equalsIndex !== 1) {
+          equalsTiles.splice(equalsIndex, 1);
+        }
+      }
     });
 
     element.addEventListener('dragend', (e) => {
@@ -329,7 +339,7 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
   const leftRight = ['='];
   const upDown = ['='];
 
-  if (skipLeftRight != true) {
+  if (!skipLeftRight) {
     while (gridCell.left) {
       gridCell.moveCell(Movement.left);
 
@@ -352,7 +362,7 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
     gridCell.resetGridValues();
   }
 
-  if (skipUpDown != true) {
+  if (!skipUpDown) {
     while (gridCell.up) {
       gridCell.moveCell(Movement.up);
 
@@ -378,7 +388,7 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
   let leftRightEval: boolean;
   let upDownEval: boolean;
 
-  if (skipLeftRight != true) {
+  if (!skipLeftRight) {
     leftRightEval = leftRight
       .join('')
       .split('=')
@@ -386,7 +396,7 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
       .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
   }
 
-  if (skipUpDown != true) {
+  if (!skipUpDown) {
     upDownEval = upDown
       .join('')
       .split('=')
@@ -396,7 +406,5 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
 
   if (skipLeftRight) return upDownEval!;
   if (skipUpDown) return leftRightEval!;
-  if (!skipUpDown && !skipLeftRight) return upDownEval! && leftRightEval!;
-
-  return false;
+  return leftRightEval! && upDownEval!;
 }
