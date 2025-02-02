@@ -59,7 +59,7 @@ export const DragNDropManager = (() => {
   let dragElem: Element | null = null;
 
   // --- used to keep track of last placed equals tile ---
-  let lastPlacedEqualsTile: EqualsTile | null = null;
+  let equalsTiles: EqualsTile[] = [];
 
   // --- used for grid data tracking ---
   let grid: GameGrid;
@@ -72,9 +72,8 @@ export const DragNDropManager = (() => {
     return grid;
   }
 
-  function getLastPlacedEquals(): EqualsTile | null {
-    console.log(lastPlacedEqualsTile);
-    return lastPlacedEqualsTile;
+  function getEqualsArray(): EqualsTile[] {
+    return equalsTiles;
   }
 
   // helper object used only for checkIfDropIsAllowed
@@ -162,9 +161,9 @@ export const DragNDropManager = (() => {
         throw new Error('value is undefined in getCellPositionAndValue');
       }
       if (e.target instanceof EqualsTile) {
-        lastPlacedEqualsTile = e.target;
+        equalsTiles.push(e.target);
         const [row, column] = getCellPositionAndValue(e);
-        lastPlacedEqualsTile.position = { row, column };
+        equalsTiles.at(-1)!.position = { row, column };
       }
     });
   }
@@ -191,7 +190,7 @@ export const DragNDropManager = (() => {
     setTileDragEvent,
     setGameGrid,
     getGameGrid,
-    getLastPlacedEquals,
+    getEqualsArray,
   };
 })();
 
