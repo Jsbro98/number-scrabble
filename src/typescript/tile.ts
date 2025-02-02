@@ -23,7 +23,7 @@ export class NumberTile extends HTMLDivElement {
 }
 
 export class OperatorTile extends HTMLDivElement {
-  private OPERATORS = ['*', '-', '/', '+'];
+  private OPERATORS = ['-', '+'];
   private currentOperator: string;
 
   constructor() {
