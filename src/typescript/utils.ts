@@ -134,7 +134,7 @@ export const DragNDropManager = (() => {
   }
 
   // Draggable tile logic
-  // TODO: Start here for EqualsTile removals in equalsTiles array
+  // TODO: Test if equalsTiles array removes equals correctly
   function setTileDragEvent(element: Element) {
     element.addEventListener('dragstart', (e) => {
       if (e.target instanceof Element) {
