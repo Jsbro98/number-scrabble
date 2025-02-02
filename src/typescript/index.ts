@@ -2,8 +2,8 @@ import {
   DragNDropManager,
   createAndAppendTiles,
   GameGrid,
-  checkEquality,
   GameGridFactory,
+  checkEquality,
 } from './utils';
 import '../style.css';
 
@@ -51,10 +51,13 @@ function main(): void {
   }
 
   submitButton.addEventListener('click', () => {
-    const currentEquals = DragNDropManager.getLastPlacedEquals();
+    const equalsArray = DragNDropManager.getEqualsArray();
 
-    if (currentEquals) {
-      console.log(checkEquality(currentEquals));
+    if (equalsArray.length > 0) {
+      equalsArray.forEach((equalSign) => {
+        console.log(equalSign);
+        console.log(checkEquality(equalSign));
+      });
     }
   });
 
