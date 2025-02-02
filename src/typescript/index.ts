@@ -14,13 +14,6 @@ todo list:
 
 TODO: add double click to return to original container
 TODO: change game to better denominations (5s, 2s, or 1s)
-TODO: test and possibly fix when equations touch
-  - rewrite equation handling to be less verbose.
-  - this should lead to fixing the combinations listed below
-    ** accumulate the whole string & split at the "=" signs
-
-1/4 - continue with equation combinations as listed above ^^
-  ex: 1 + 1 = 4 - 2 = 3 - 1
 
 */
 
