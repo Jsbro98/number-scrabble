@@ -153,7 +153,7 @@ export const DragNDropManager = (() => {
           (tile) => tile.position.row === row && tile.position.column === column
         );
 
-        if (equalsIndex !== 1) {
+        if (equalsIndex !== -1) {
           equalsTiles.splice(equalsIndex, 1);
         }
       }
