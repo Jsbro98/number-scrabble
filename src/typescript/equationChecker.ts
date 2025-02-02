@@ -36,7 +36,7 @@ export class EquationChecker {
     return false;
   }
 
-  checkEquation(): boolean {
+  public checkEquation(): boolean {
     let left: number | false = this.isSideLengthOne(this.leftSide);
     let right: number | false = this.isSideLengthOne(this.rightSide);
 
@@ -59,7 +59,7 @@ export class EquationChecker {
     return left === right;
   }
 
-  setEquation(eq: Equation) {
+  public setEquation(eq: Equation) {
     this.equation = eq;
   }
 }
