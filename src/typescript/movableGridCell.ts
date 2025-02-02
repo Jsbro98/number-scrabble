@@ -3,7 +3,7 @@ import { match } from 'ts-pattern';
 
 export class MovableGridCell implements TraversableCell {
   private grid: GameGrid;
-  private orignialRowValue: number;
+  private originalRowValue: number;
   private originalColumnValue: number;
   public currentRow: number;
   public currentColumn: number;
@@ -18,7 +18,7 @@ export class MovableGridCell implements TraversableCell {
     this.currentRow = row;
     this.currentColumn = column;
     this.originalColumnValue = column;
-    this.orignialRowValue = row;
+    this.originalRowValue = row;
     this.left = grid.getCell(row, column - 1);
     this.right = grid.getCell(row, column + 1);
     this.up = grid.getCell(row - 1, column);
@@ -37,7 +37,7 @@ export class MovableGridCell implements TraversableCell {
 
   public resetGridValues() {
     this.currentColumn = this.originalColumnValue;
-    this.currentRow = this.orignialRowValue;
+    this.currentRow = this.originalRowValue;
     this.updateValues();
   }
 
