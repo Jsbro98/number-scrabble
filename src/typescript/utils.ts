@@ -15,6 +15,7 @@ export enum Movement {
 }
 
 export type StringOrNull = string | null;
+export type Tile = NumberTile | OperatorTile | EqualsTile;
 
 /*
   ####################################################
@@ -205,6 +206,39 @@ export const DragNDropManager = (() => {
     getEqualsArray,
   };
 })();
+
+// ##### Double-click handler #####
+/* - dragstart & dragend are simulated to ensure
+     grid tracking logic execution
+*/
+export const doubleClickHandler = {
+  handleDoubleClick(event: MouseEvent) {
+    const tile = event.currentTarget as Tile;
+    const parent = tile.parentElement;
+    const originalContainerSelector = this.getOriginalContainer(tile);
+    const originalContainer = document.querySelector(originalContainerSelector);
+
+    if (!originalContainer) {
+      throw new Error(
+        `Original container not found for tile type: ${tile.constructor.name}`
+      );
+    }
+
+    tile.dispatchEvent(new DragEvent('dragstart')); // simulate dragstart event
+
+    parent?.removeChild(tile);
+    originalContainer.appendChild(tile);
+
+    tile.dispatchEvent(new DragEvent('dragend')); // simulate dragend event
+  },
+
+  getOriginalContainer(tile: Tile): string {
+    if (tile instanceof NumberTile) return '.number-tile-container';
+    if (tile instanceof OperatorTile) return '.operator-tile-container';
+    if (tile instanceof EqualsTile) return '.equals-tile-container';
+    throw new Error('Unknown tile type');
+  },
+};
 
 /*
   ####################################################
