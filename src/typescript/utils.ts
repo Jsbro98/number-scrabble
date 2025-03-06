@@ -134,8 +134,8 @@ export const DragNDropManager = (() => {
   }
 
   // Draggable tile logic
-  // TODO: Test if equalsTiles array removes equals correctly
   function setTileDragEvent(element: Element) {
+    // ##### dragstart #####
     element.addEventListener('dragstart', (e) => {
       if (e.target instanceof Element) {
         dragElem = e.target;
@@ -159,6 +159,7 @@ export const DragNDropManager = (() => {
       }
     });
 
+    // ##### dragend #####
     element.addEventListener('dragend', (e) => {
       if (e.target instanceof Element) {
         if (!dropAllowedHelper.containerContainsCell(e.target.parentElement!)) {
