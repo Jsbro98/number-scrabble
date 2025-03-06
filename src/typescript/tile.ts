@@ -1,6 +1,6 @@
 import {
   CellPosition,
-  doubleClickHandler,
+  DoubleClickHandler,
   DragNDropManager,
   getRandomNumber,
 } from './utils';
@@ -14,7 +14,7 @@ export class NumberTile extends HTMLDivElement {
     this.numberValue = getRandomNumber(10);
     this.addEventListener(
       'dblclick',
-      doubleClickHandler.handleDoubleClick.bind(doubleClickHandler)
+      DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
   }
 
@@ -41,7 +41,7 @@ export class OperatorTile extends HTMLDivElement {
     DragNDropManager.setTileDragEvent(this);
     this.addEventListener(
       'dblclick',
-      doubleClickHandler.handleDoubleClick.bind(doubleClickHandler)
+      DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
   }
 
@@ -66,7 +66,7 @@ export class EqualsTile extends HTMLDivElement {
     DragNDropManager.setTileDragEvent(this);
     this.addEventListener(
       'dblclick',
-      doubleClickHandler.handleDoubleClick.bind(doubleClickHandler)
+      DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
   }
 

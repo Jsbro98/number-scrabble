@@ -211,7 +211,7 @@ export const DragNDropManager = (() => {
 /* - dragstart & dragend are simulated to ensure
      grid tracking logic execution
 */
-export const doubleClickHandler = {
+export const DoubleClickHandler = {
   handleDoubleClick(event: MouseEvent) {
     const tile = event.currentTarget as Tile;
     const parent = tile.parentElement;
