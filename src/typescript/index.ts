@@ -6,7 +6,6 @@ import {
   checkEquality,
 } from './utils';
 import '../style.css';
-import { boolean } from 'mathjs';
 
 /*
 fixmes:
