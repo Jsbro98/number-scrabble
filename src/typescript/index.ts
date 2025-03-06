@@ -6,6 +6,7 @@ import {
   checkEquality,
 } from './utils';
 import '../style.css';
+import { boolean } from 'mathjs';
 
 /*
 fixmes:
@@ -47,13 +48,11 @@ function main(): void {
 
   submitButton.addEventListener('click', () => {
     const equalsArray = DragNDropManager.getEqualsArray();
+    if (equalsArray.length <= 0) return;
 
-    if (equalsArray.length > 0) {
-      equalsArray.forEach((equalSign) => {
-        console.log(equalSign);
-        console.log(checkEquality(equalSign));
-      });
-    }
+    return equalsArray.forEach((equals) => {
+      checkEquality(equals);
+    });
   });
 
   DragNDropManager.setGameGrid(gameGrid);
