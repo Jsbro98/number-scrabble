@@ -12,7 +12,6 @@ fixmes:
 
 todo list:
 
-TODO: add double click to return to original container
 TODO: make turn switching possible
 TODO: add drawing tiles when low or empty option (uses turn)
   - limit number of refills (game ending metric)
