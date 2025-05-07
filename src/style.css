@@ -37,11 +37,10 @@ body {
 
 /* Tile styling */
 
-.tile-wrapper {
+.player-ui {
   display: flex;
   flex-direction: column;
   width: 30%;
-  height: 50%;
   gap: 15px;
 }
 
@@ -71,6 +70,8 @@ body {
   background: linear-gradient(to left, rgb(240, 188, 0), rgb(255, 221, 0));
 }
 
+/* Submit move button styling */
+
 .submit-move {
   width: fit-content;
   margin-left: auto;
@@ -94,4 +95,17 @@ body {
 .submit-move:active {
   background: rgba(128, 128, 128, 0.547);
   color: black;
+}
+
+/* Player score styling */
+
+.score-wrapper {
+  display: flex;
+  flex: 1;
+  gap: 3px;
+}
+
+.score {
+  flex: 1;
+  border: solid black 2px;
 }
