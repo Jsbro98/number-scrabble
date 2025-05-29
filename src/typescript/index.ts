@@ -16,6 +16,7 @@ TODO: make turn switching possible
 TODO: add drawing tiles when low or empty option (uses turn)
   - limit number of refills (game ending metric)
 TODO: add score keeping
+  - create a object for keeping score
 TODO: change game to better denominations (5s, 2s, or 1s)
 
 */
@@ -35,6 +36,7 @@ function main(): void {
   const equalsTileContainer = document.querySelector('.equals-tile-container');
   const gridContainer = document.querySelector('.grid-container');
   const submitButton = document.querySelector('.submit-move');
+  const currentPlayer = document.querySelector('.current-player');
 
   if (
     numberTileContainer === null ||
