@@ -16,6 +16,10 @@ export enum Movement {
 
 export type StringOrNull = string | null;
 export type Tile = NumberTile | OperatorTile | EqualsTile;
+export type ScoreState = {
+  player1: number;
+  player2: number;
+};
 
 /*
   ####################################################
@@ -239,6 +243,40 @@ export const DoubleClickHandler = {
     throw new Error('Unknown tile type');
   },
 };
+
+/*
+  ####################################################
+          Game score keeping functionality
+  ####################################################
+*/
+
+export function createScoreState(): ScoreState {
+  return {
+    player1: 0,
+    player2: 0,
+  };
+}
+
+// I wanted to try a functional approach to keeping score
+export function createScoreManager(
+  initialState: ScoreState = createScoreState()
+) {
+  let state = initialState;
+  return {
+    getState: (): ScoreState => ({ ...state }),
+    updateScore: (player: keyof ScoreState, value: number): ScoreState => {
+      state = {
+        ...state,
+        [player]: state[player] + value,
+      };
+      return state;
+    },
+    resetScore: (): ScoreState => {
+      state = createScoreState();
+      return state;
+    },
+  };
+}
 
 /*
   ####################################################
