@@ -127,7 +127,8 @@ table {
 
 /* --- CSS Vars --- */
 :root {
-  --container-border: lightgrey solid 2px;
+  --container-border: rgba(128, 128, 128, 0.678) solid 2px;
+  --container-border-radius: 5px;
 }
 
 /* --- Body styling --- */
@@ -135,6 +136,11 @@ table {
 body {
   display: flex;
   justify-content: space-between;
+  padding: 5px;
+  background-image: url('../img/background.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* --- Game grid styling --- */
@@ -184,6 +190,7 @@ body {
   display: flex;
   gap: 5px;
   border: var(--container-border);
+  border-radius: var(--container-border-radius);
   padding: 10px;
   flex: 1;
   flex-wrap: wrap;
@@ -204,7 +211,7 @@ body {
   background: linear-gradient(to left, rgb(240, 188, 0), rgb(255, 221, 0));
 }
 
-/* ++ sumbit & current wrapper styling */
+/* ++ submit & current wrapper styling */
 
 .submit-current-wrapper {
   display: flex;
@@ -212,6 +219,7 @@ body {
   flex: 1;
   gap: 3px;
   border: var(--container-border);
+  border-radius: var(--container-border-radius);
   padding: 6px;
 }
 
@@ -223,7 +231,7 @@ body {
   padding: 10px;
   border-radius: 4px;
   border: 2px solid black;
-  background: rgba(128, 128, 128, 0.547);
+  background: lightgray;
   color: black;
   font-weight: bold;
   font-family: 'Times New Roman';
@@ -255,7 +263,9 @@ body {
 
   text-decoration: underline;
   font-style: italic;
-  color: gray;
+  background-image: linear-gradient(darkorange, black);
+  color: transparent;
+  background-clip: text;
   margin-left: 3px;
 }
 
@@ -274,10 +284,11 @@ body {
 .score-wrapper {
   display: flex;
   flex: 1;
-  gap: 3px;
+  gap: 5px;
 }
 
 .score {
   flex: 1;
   border: var(--container-border);
+  border-radius: var(--container-border-radius);
 }
