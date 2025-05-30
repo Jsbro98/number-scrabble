@@ -225,10 +225,17 @@ export const DoubleClickHandler = {
   handleDoubleClick(event: MouseEvent) {
     const tile = event.currentTarget as Tile;
     const parent = tile.parentElement;
-    const originalContainerSelector = this.getOriginalContainer(tile);
-    const originalContainer = document.querySelector(originalContainerSelector);
+    const originalContainer = this.getOriginalContainer(tile);
 
-    if (!originalContainer) {
+    // if the tile is already in it's home container, return
+    if (parent && parent.classList.contains(originalContainer)) {
+      return;
+    }
+
+    // now grab the container
+    const originalElement = document.querySelector('.' + originalContainer);
+
+    if (!originalElement) {
       throw new Error(
         `Original container not found for tile type: ${tile.constructor.name}`
       );
@@ -237,15 +244,15 @@ export const DoubleClickHandler = {
     tile.dispatchEvent(new DragEvent('dragstart')); // simulate dragstart event
 
     parent?.removeChild(tile);
-    originalContainer.appendChild(tile);
+    originalElement.appendChild(tile);
 
     tile.dispatchEvent(new DragEvent('dragend')); // simulate dragend event
   },
 
   getOriginalContainer(tile: Tile): string {
-    if (tile instanceof NumberTile) return '.number-tile-container';
-    if (tile instanceof OperatorTile) return '.operator-tile-container';
-    if (tile instanceof EqualsTile) return '.equals-tile-container';
+    if (tile instanceof NumberTile) return 'number-tile-container';
+    if (tile instanceof OperatorTile) return 'operator-tile-container';
+    if (tile instanceof EqualsTile) return 'equals-tile-container';
     throw new Error('Unknown tile type');
   },
 };
