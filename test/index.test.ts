@@ -4,6 +4,10 @@ import {
   DragNDropManager,
   GameGrid,
   GameGridFactory,
+  createScoreState,
+  createScoreManager,
+  ScoreState,
+  ScoreManager,
 } from '../src/typescript/utils';
 
 // NumberTile tests
@@ -116,6 +120,60 @@ describe('DragNDropManager & GameGrid tests', () => {
       expect(testArr[0]).toBeDefined();
       expect(testArr[0].position).toStrictEqual([10, 10]);
       expect(testArr[0].value).toBe('BEEP');
+    });
+  });
+});
+
+describe('createScoreManager & createScoreState tests', () => {
+  describe('createScoreState tests', () => {
+    it('creates a score state', () => {
+      const scoreState: ScoreState = createScoreState();
+      expect(scoreState).toBeDefined();
+      expect(scoreState).toHaveProperty('player1');
+      expect(scoreState).toHaveProperty('player2');
+      expect(scoreState.player1).toBe(0);
+      expect(scoreState.player2).toBe(0);
+    });
+  });
+
+  describe('createScoreManager tests', () => {
+    let scoreManager: ScoreManager;
+
+    beforeAll(() => {
+      scoreManager = createScoreManager();
+    });
+
+    it('creates a score manager', () => {
+      expect(scoreManager).toBeDefined();
+    });
+
+    it('has all its methods', () => {
+      expect(scoreManager).toHaveProperty('getState');
+      expect(scoreManager).toHaveProperty('updateScore');
+      expect(scoreManager).toHaveProperty('resetScore');
+    });
+
+    it('creates new score state each iteration', () => {
+      const initialState = scoreManager.getState();
+      expect(initialState).toBeDefined();
+      expect(initialState).not.toBe(scoreManager.getState());
+    });
+
+    it('updates score correctly', () => {
+      const initialState = scoreManager.getState();
+      const updatedState = scoreManager.updateScore('player1', 10);
+      expect(updatedState.player1).toEqual(initialState.player1 + 10);
+      expect(updatedState.player2).toEqual(initialState.player2);
+      scoreManager.resetScore();
+    });
+
+    it('resets score correctly', () => {
+      const initialState = scoreManager.getState();
+      scoreManager.updateScore('player1', 10);
+      expect(scoreManager.getState().player1).toEqual(10);
+      const resetState = scoreManager.resetScore();
+      expect(resetState).toEqual(initialState);
+      expect(resetState).not.toBe(initialState);
     });
   });
 });
