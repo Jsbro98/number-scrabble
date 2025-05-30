@@ -43,7 +43,8 @@ function main(): void {
     operatorTileContainer === null ||
     equalsTileContainer === null ||
     gridContainer === null ||
-    submitButton === null
+    submitButton === null ||
+    currentPlayer === null
   ) {
     throw new Error('one of the game container selectors returned null');
   }
