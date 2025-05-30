@@ -38,7 +38,7 @@ describe('NumberTile Generator Function Tests', () => {
 // OperatorTile Tests
 describe('OperatorTile Generator Tests', () => {
   let tile: OperatorTile;
-  const operators = ['+', '-', '*', '/'];
+  const operators = ['+', '-'];
 
   beforeAll(() => {
     tile = new OperatorTile();
