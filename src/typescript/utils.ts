@@ -45,6 +45,12 @@ export interface CellPosition {
   column: number;
 }
 
+export interface ScoreManager {
+  getState: () => ScoreState;
+  updateScore: (player: keyof ScoreState, value: number) => ScoreState;
+  resetScore: () => ScoreState;
+}
+
 export interface TraversableCell {
   moveCell(movement: Movement): void;
   left: StringOrNull;
@@ -260,7 +266,7 @@ export function createScoreState(): ScoreState {
 // I wanted to try a functional approach to keeping score
 export function createScoreManager(
   initialState: ScoreState = createScoreState()
-) {
+): ScoreManager {
   let state = initialState;
   return {
     getState: (): ScoreState => ({ ...state }),
