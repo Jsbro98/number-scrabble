@@ -271,7 +271,7 @@ export function createScoreState(): ScoreState {
 }
 
 // I wanted to try a functional approach to keeping score
-export function createScoreManager(
+export function ScoreManagerFactory(
   initialState: ScoreState = createScoreState()
 ): ScoreManager {
   let state = initialState;

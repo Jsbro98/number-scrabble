@@ -5,7 +5,7 @@ import {
   GameGrid,
   GameGridFactory,
   createScoreState,
-  createScoreManager,
+  ScoreManagerFactory,
   ScoreState,
   ScoreManager,
 } from '../src/typescript/utils';
@@ -124,7 +124,7 @@ describe('DragNDropManager & GameGrid tests', () => {
   });
 });
 
-describe('createScoreManager & createScoreState tests', () => {
+describe('ScoreManagerFactory & createScoreState tests', () => {
   describe('createScoreState tests', () => {
     it('creates a score state', () => {
       const scoreState: ScoreState = createScoreState();
@@ -136,11 +136,11 @@ describe('createScoreManager & createScoreState tests', () => {
     });
   });
 
-  describe('createScoreManager tests', () => {
+  describe('ScoreManagerFactory tests', () => {
     let scoreManager: ScoreManager;
 
     beforeAll(() => {
-      scoreManager = createScoreManager();
+      scoreManager = ScoreManagerFactory();
     });
 
     it('creates a score manager', () => {
