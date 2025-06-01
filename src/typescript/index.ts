@@ -4,20 +4,31 @@ import {
   GameGrid,
   GameGridFactory,
   checkEquality,
+  ScoreManagerFactory,
+  ScoreManager,
 } from './utils';
 import '../style.css';
 
 /*
+'*1*' syntax is used indicate which order the TODOs I'll work on them in
+
 fixmes:
 
 todo list:
 
-TODO: make turn switching possible
-TODO: add drawing tiles when low or empty option (uses turn)
+TODO: add drawing tiles when low or empty option (uses turn) *3*
   - limit number of refills (game ending metric)
-TODO: add score keeping
-  - create a object for keeping score
-TODO: change game to better denominations (5s, 2s, or 1s)
+
+TODO: add score keeping *2*
+  - make turn switching possible
+  - implement logic using ScoreManager & ScoreState
+    + display the logic to the player-one-score & player-two-score
+
+TODO: add point collecting system for when a turn is submitted *1*
+  - logic should be if checkEquality returns true, add the points to the
+  current player's score
+
+TODO: change game to better denominations (5s, 2s, or 1s) *4*
 
 */
 
@@ -28,6 +39,9 @@ TODO: change game to better denominations (5s, 2s, or 1s)
 function main(): void {
   // Main game grid
   const gameGrid: GameGrid = GameGridFactory();
+
+  // Main score keeping logic
+  const scoreManager: ScoreManager = ScoreManagerFactory();
 
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector(
