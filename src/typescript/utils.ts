@@ -65,6 +65,22 @@ export interface TraversableCell {
 
 /*
   ####################################################
+            Grid reference tracker object
+  ####################################################
+*/
+
+export const GridReferenceManager = (() => {
+  let grid: GameGrid;
+  return {
+    setGrid: (setValue: GameGrid): void => {
+      grid = setValue;
+    },
+    getGrid: (): GameGrid => grid,
+  };
+})();
+
+/*
+  ####################################################
       Main drag n drop functionality object
   ####################################################
 */
@@ -77,15 +93,7 @@ export const DragNDropManager = (() => {
   let equalsTiles: EqualsTile[] = [];
 
   // --- used for grid data tracking ---
-  let grid: GameGrid;
-
-  function setGameGrid(setValue: GameGrid) {
-    grid = setValue;
-  }
-
-  function getGameGrid(): GameGrid {
-    return grid;
-  }
+  let grid: GameGrid = GridReferenceManager.getGrid();
 
   function getEqualsArray(): EqualsTile[] {
     return equalsTiles;
@@ -215,8 +223,6 @@ export const DragNDropManager = (() => {
   return {
     makeDragAndDropContainer,
     setTileDragEvent,
-    setGameGrid,
-    getGameGrid,
     getEqualsArray,
   };
 })();
@@ -302,7 +308,7 @@ export function ScoreManagerFactory(
 */
 
 export function checkEquality(equalsTile: EqualsTile): boolean {
-  const grid = DragNDropManager.getGameGrid();
+  const grid = GridReferenceManager.getGrid();
   const row = equalsTile.position.row;
   const column = equalsTile.position.column;
 
