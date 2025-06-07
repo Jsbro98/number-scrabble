@@ -6,6 +6,7 @@ import {
   checkEquality,
   ScoreManagerFactory,
   ScoreManager,
+  GridReferenceManager,
 } from './utils';
 import '../style.css';
 
@@ -64,15 +65,10 @@ function main(): void {
   }
 
   submitButton.addEventListener('click', () => {
-    const equalsArray = DragNDropManager.getEqualsArray();
-    if (equalsArray.length <= 0) return;
-
-    return equalsArray.forEach((equals) => {
-      checkEquality(equals);
-    });
+    checkGameBoard();
   });
 
-  DragNDropManager.setGameGrid(gameGrid);
+  GridReferenceManager.setGrid(gameGrid);
 
   DragNDropManager.makeDragAndDropContainer(
     numberTileContainer,
@@ -90,3 +86,12 @@ main();
 
 // ########################################################################
 // ########################################################################
+
+// ---------- Functions & Objects used within main *localized* ----------
+
+function checkGameBoard(): boolean {
+  const equalsArray = DragNDropManager.getEqualsArray();
+  if (equalsArray.length <= 0) return false;
+
+  return equalsArray.every(checkEquality);
+}
