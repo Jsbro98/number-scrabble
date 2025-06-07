@@ -336,73 +336,73 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
   const upDown = ['='];
 
   if (!skipLeftRight) {
-    while (gridCell.left) {
-      gridCell.moveCell(Movement.left);
-
-      if (gridCell.current === null) break;
-
-      leftRight.unshift(gridCell.current);
-    }
-
-    gridCell.resetGridValues();
-
-    while (gridCell.right) {
-      gridCell.moveCell(Movement.right);
-
-      if (gridCell.current === null) break;
-
-      leftRight.push(gridCell.current);
-    }
-
-    // get grid ready for possible up & down traversal
-    gridCell.resetGridValues();
+    traverse(Movement.left, leftRight, 'unshift', () => gridCell.left);
+    traverse(Movement.right, leftRight, 'push', () => gridCell.right);
   }
 
   if (!skipUpDown) {
-    while (gridCell.up) {
-      gridCell.moveCell(Movement.up);
+    traverse(Movement.up, upDown, 'unshift', () => gridCell.up);
+    traverse(Movement.down, upDown, 'push', () => gridCell.down);
+  }
 
+  return finalResultFrom(directionEvals());
+
+  // --- Helper functions ---
+
+  // used for moving gridCell
+  function traverse(
+    direction: Movement,
+    arr: string[],
+    method: 'push' | 'unshift',
+    check: () => StringOrNull
+  ): void {
+    while (check()) {
+      gridCell.moveCell(direction);
       if (gridCell.current === null) break;
-
-      upDown.unshift(gridCell.current);
+      arr[method](gridCell.current);
     }
 
-    gridCell.resetGridValues();
-
-    while (gridCell.down) {
-      gridCell.moveCell(Movement.down);
-
-      if (gridCell.current === null) break;
-
-      upDown.push(gridCell.current);
-    }
-
+    // get grid ready for another direction traversal
     gridCell.resetGridValues();
   }
 
-  // used for final return values
-  let leftRightEval: boolean;
-  let upDownEval: boolean;
+  // consumes config results & outputs a final boolean
+  function finalResultFrom({
+    leftRightEval,
+    upDownEval,
+  }: {
+    leftRightEval: boolean;
+    upDownEval: boolean;
+  }): boolean {
+    if (skipLeftRight) return upDownEval!;
+    if (skipUpDown) return leftRightEval!;
+    return leftRightEval! && upDownEval!;
+  }
 
-  if (!skipLeftRight) {
-    leftRightEval = leftRight
+  // configures array results based on skip conditions
+  function directionEvals(): { leftRightEval: boolean; upDownEval: boolean } {
+    let leftRightEval: boolean = false;
+    let upDownEval: boolean = false;
+
+    if (!skipLeftRight) {
+      leftRightEval = evaluateExpression(leftRight);
+    }
+
+    if (!skipUpDown) {
+      upDownEval = evaluateExpression(upDown);
+    }
+
+    return { leftRightEval, upDownEval };
+  }
+
+  // check a string array for total equality
+  function evaluateExpression(arr: string[]): boolean {
+    return arr
       .join('')
       .split('=')
       .map((expression) => evaluate(expression))
       .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
   }
-
-  if (!skipUpDown) {
-    upDownEval = upDown
-      .join('')
-      .split('=')
-      .map((expression) => evaluate(expression))
-      .every((val, _, arr) => val === arr[0]);
-  }
-
-  if (skipLeftRight) return upDownEval!;
-  if (skipUpDown) return leftRightEval!;
-  return leftRightEval! && upDownEval!;
 }
 
 // *================================================================*
