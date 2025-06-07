@@ -159,6 +159,14 @@ describe('ScoreManagerFactory & createScoreState tests', () => {
       expect(initialState).not.toBe(scoreManager.getState());
     });
 
+    it('keeps score throughout state ref changes', () => {
+      scoreManager.resetScore();
+      scoreManager.updateScore('player1', 10);
+      const updatedState = scoreManager.getState();
+      expect(updatedState.player1).toEqual(10);
+      scoreManager.resetScore();
+    });
+
     it('updates score correctly', () => {
       const initialState = scoreManager.getState();
       const updatedState = scoreManager.updateScore('player1', 10);
