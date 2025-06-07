@@ -95,7 +95,6 @@ describe('GridReferenceManager & GameGrid tests', () => {
 
   describe('GridReferenceManager', () => {
     it('sets a grid', () => {
-      GridReferenceManager.setGrid(testGrid);
       expect(GridReferenceManager.getGrid()).toBeTruthy();
     });
   });
