@@ -1,13 +1,13 @@
 import { EquationChecker } from '../src/typescript/equationChecker';
 import { NumberTile, OperatorTile } from '../src/typescript/tile';
 import {
-  DragNDropManager,
   GameGrid,
   GameGridFactory,
   createScoreState,
   ScoreManagerFactory,
   ScoreState,
   ScoreManager,
+  GridReferenceManager,
 } from '../src/typescript/utils';
 
 // NumberTile tests
@@ -86,17 +86,17 @@ describe('EquationChecker Tests', () => {
 
 // DragNDropManager tests
 
-describe('DragNDropManager & GameGrid tests', () => {
+describe('GridReferenceManager & GameGrid tests', () => {
   let testGrid: GameGrid;
 
   beforeAll(() => {
     testGrid = GameGridFactory();
   });
 
-  describe('DragNDropManager', () => {
+  describe('GridReferenceManager', () => {
     it('sets a grid', () => {
-      DragNDropManager.setGameGrid(testGrid);
-      expect(DragNDropManager.getGameGrid).toBeTruthy();
+      GridReferenceManager.setGrid(testGrid);
+      expect(GridReferenceManager.getGrid()).toBeTruthy();
     });
   });
 
