@@ -1,12 +1,10 @@
 import {
   DragNDropManager,
   createAndAppendTiles,
-  GameGrid,
-  GameGridFactory,
   checkEquality,
   ScoreManagerFactory,
   ScoreManager,
-  GridReferenceManager,
+  EqualsTiles,
 } from './utils';
 import '../style.css';
 
@@ -38,9 +36,6 @@ TODO: change game to better denominations (5s, 2s, or 1s) *4*
 // ---------- Main function ----------
 
 function main(): void {
-  // Main game grid
-  const gameGrid: GameGrid = GameGridFactory();
-
   // Main score keeping logic
   const scoreManager: ScoreManager = ScoreManagerFactory();
 
@@ -68,8 +63,6 @@ function main(): void {
     checkGameBoard();
   });
 
-  GridReferenceManager.setGrid(gameGrid);
-
   DragNDropManager.makeDragAndDropContainer(
     numberTileContainer,
     operatorTileContainer,
@@ -90,7 +83,7 @@ main();
 // ---------- Functions & Objects used within main *localized* ----------
 
 function checkGameBoard(): boolean {
-  const equalsArray = DragNDropManager.getEqualsArray();
+  const equalsArray = EqualsTiles.getTiles();
   if (equalsArray.length <= 0) return false;
 
   return equalsArray.every(checkEquality);
