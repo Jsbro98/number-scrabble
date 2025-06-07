@@ -70,12 +70,35 @@ export interface TraversableCell {
 */
 
 export const GridReferenceManager = (() => {
-  let grid: GameGrid;
+  let grid: GameGrid = GameGridFactory();
   return {
-    setGrid: (setValue: GameGrid): void => {
-      grid = setValue;
-    },
     getGrid: (): GameGrid => grid,
+  };
+})();
+
+/*
+  ####################################################
+                Equals tile tracker
+  ####################################################
+*/
+
+export const EqualsTiles = (() => {
+  let tiles: EqualsTile[] = [];
+
+  return {
+    addTile(tile: EqualsTile): void {
+      tiles.push(tile);
+    },
+
+    removeTile(tile: EqualsTile): void {
+      tiles = tiles.filter((t) => {
+        return t !== tile;
+      });
+    },
+
+    getTiles(): EqualsTile[] {
+      return tiles;
+    },
   };
 })();
 
@@ -89,15 +112,8 @@ export const DragNDropManager = (() => {
   // --- used for drag n drop functionality ---
   let dragElem: Element | null = null;
 
-  // --- used to keep track of last placed equals tile ---
-  let equalsTiles: EqualsTile[] = [];
-
   // --- used for grid data tracking ---
   let grid: GameGrid = GridReferenceManager.getGrid();
-
-  function getEqualsArray(): EqualsTile[] {
-    return equalsTiles;
-  }
 
   // helper object used only for checkIfDropIsAllowed
   const dropAllowedHelper = {
@@ -172,13 +188,7 @@ export const DragNDropManager = (() => {
       grid.removeCell(row, column);
 
       if (e.target instanceof EqualsTile) {
-        const equalsIndex = equalsTiles.findIndex(
-          (tile) => tile.position.row === row && tile.position.column === column
-        );
-
-        if (equalsIndex !== -1) {
-          equalsTiles.splice(equalsIndex, 1);
-        }
+        EqualsTiles.removeTile(e.target);
       }
     });
 
@@ -196,9 +206,9 @@ export const DragNDropManager = (() => {
         throw new Error('value is undefined in getCellPositionAndValue');
       }
       if (e.target instanceof EqualsTile) {
-        equalsTiles.push(e.target);
+        EqualsTiles.addTile(e.target);
         const [row, column] = getCellPositionAndValue(e);
-        equalsTiles.at(-1)!.position = { row, column };
+        e.target.position = { row, column };
       }
     });
   }
@@ -223,7 +233,6 @@ export const DragNDropManager = (() => {
   return {
     makeDragAndDropContainer,
     setTileDragEvent,
-    getEqualsArray,
   };
 })();
 
