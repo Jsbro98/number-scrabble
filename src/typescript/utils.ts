@@ -65,7 +65,7 @@ export interface TraversableCell {
 
 /*
   ####################################################
-            Grid reference tracker object
+              Grid reference tracker
   ####################################################
 */
 
