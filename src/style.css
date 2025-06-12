@@ -288,7 +288,21 @@ body {
 }
 
 .score {
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  padding: 3px;
   border: var(--container-border);
   border-radius: var(--container-border-radius);
+}
+
+.score > :nth-child(1) {
+  text-align: center;
+}
+
+.score > :nth-child(2) {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
