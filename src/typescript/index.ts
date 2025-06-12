@@ -10,21 +10,14 @@ import '../style.css';
 
 fixmes:
 
+FIXME: see util.ts for current bug
+
 todo list:
 
-TODO: add drawing tiles when low or empty option (uses turn) *3*
-  - limit number of refills (game ending metric)
+TODO: add game ending metric *2*
+  - limit number of tile refils or max points
 
-TODO: add score keeping *2*
-  - make turn switching possible
-  - implement logic using ScoreManager & ScoreState
-    + display the logic to the player-one-score & player-two-score
-
-TODO: add point collecting system for when a turn is submitted *1*
-  - logic should be if checkEquality returns true, add the points to the
-  current player's score
-
-TODO: change game to better denominations (5s, 2s, or 1s) *4*
+TODO: change game to better denominations (5s, 2s, or 1s) *1*
 
 */
 
