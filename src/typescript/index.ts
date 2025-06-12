@@ -1,10 +1,7 @@
 import {
   DragNDropManager,
   createAndAppendTiles,
-  checkEquality,
-  ScoreManagerFactory,
-  ScoreManager,
-  EqualsTiles,
+  createSubmitButtonListener,
 } from './utils';
 import '../style.css';
 
@@ -36,9 +33,6 @@ TODO: change game to better denominations (5s, 2s, or 1s) *4*
 // ---------- Main function ----------
 
 function main(): void {
-  // Main score keeping logic
-  const scoreManager: ScoreManager = ScoreManagerFactory();
-
   const numberTileContainer = document.querySelector('.number-tile-container');
   const operatorTileContainer = document.querySelector(
     '.operator-tile-container'
@@ -59,9 +53,7 @@ function main(): void {
     throw new Error('one of the game container selectors returned null');
   }
 
-  submitButton.addEventListener('click', () => {
-    checkGameBoard();
-  });
+  submitButton.addEventListener('click', createSubmitButtonListener());
 
   DragNDropManager.makeDragAndDropContainer(
     numberTileContainer,
@@ -79,12 +71,3 @@ main();
 
 // ########################################################################
 // ########################################################################
-
-// ---------- Functions & Objects used within main *localized* ----------
-
-function checkGameBoard(): boolean {
-  const equalsArray = EqualsTiles.getTiles();
-  if (equalsArray.length <= 0) return false;
-
-  return equalsArray.every(checkEquality);
-}
