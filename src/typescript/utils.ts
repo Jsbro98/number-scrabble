@@ -20,6 +20,10 @@ export type ScoreState = {
   player1: number;
   player2: number;
 };
+type EqualityDirectionalArray = {
+  skipped: boolean;
+  result: string[];
+};
 
 /*
   ####################################################
@@ -43,6 +47,12 @@ export interface GameMove {
 export interface CellPosition {
   row: number;
   column: number;
+}
+
+interface EqualityCheckResult {
+  result: boolean;
+  leftRightValues: EqualityDirectionalArray;
+  upDownValues: EqualityDirectionalArray;
 }
 
 export interface ScoreManager {
@@ -316,7 +326,7 @@ export function ScoreManagerFactory(
   ####################################################
 */
 
-export function checkEquality(equalsTile: EqualsTile): boolean {
+export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
   const grid = GridReferenceManager.getGrid();
   const row = equalsTile.position.row;
   const column = equalsTile.position.column;
@@ -345,7 +355,17 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
     traverse(Movement.down, upDown, 'push', () => gridCell.down);
   }
 
-  return finalResultFrom(directionEvals());
+  return {
+    result: finalResultFrom(directionEvals()),
+    leftRightValues: {
+      skipped: skipLeftRight,
+      result: leftRight,
+    },
+    upDownValues: {
+      skipped: skipUpDown,
+      result: upDown,
+    },
+  };
 
   // --- Helper functions ---
 
@@ -402,6 +422,96 @@ export function checkEquality(equalsTile: EqualsTile): boolean {
       .split('=')
       .map((expression) => evaluate(expression))
       .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
+  }
+}
+
+/*
+  ####################################################
+            Submit button composed function
+  ####################################################
+*/
+
+// FIXME: continue here
+// needs to be able to use an equals sign both ways (up/down, left/right)
+// right now it can only be used once
+export function createSubmitButtonListener() {
+  const scoreManager = ScoreManagerFactory();
+  const player = {
+    current: getCurrentPlayer(),
+    next() {
+      this.current = this.current === 'player1' ? 'player2' : 'player1';
+    },
+  };
+  const scoredEqualsTiles = new Set<string>();
+
+  // main listener
+  return function submitButtonFunction() {
+    if (updatePointsIfAllEqual()) {
+      updateDivText();
+      changeCurrentPlayer();
+    }
+  };
+
+  // ----- Helper functions -----
+
+  function updatePointsIfAllEqual(): boolean {
+    const tiles: EqualsTile[] = EqualsTiles.getTiles();
+
+    if (tiles.length <= 0) return false;
+
+    let lastCheck: EqualityCheckResult;
+    const lastEqualsTile = tiles.at(-1)!;
+
+    // if tile was already scored, return early
+    const lastEqualsPositionKey = getCellPositionKey(lastEqualsTile.position);
+    if (scoredEqualsTiles.has(lastEqualsPositionKey)) return false;
+
+    const allEqual = tiles.every((tile) => {
+      if (tile === lastEqualsTile) {
+        lastCheck = checkEquality(tile);
+        return lastCheck.result;
+      }
+      return checkEquality(tile).result;
+    });
+
+    /*
+    only send the points of the
+    last placed equals sign
+    */
+    if (allEqual) {
+      sendPoints(lastCheck!);
+      scoredEqualsTiles.add(lastEqualsPositionKey);
+    }
+
+    return true;
+  }
+
+  // give ScoreManager the points
+  function sendPoints(result: EqualityCheckResult) {
+    // tuple of the keys to iterate over
+    const directions = ['leftRightValues', 'upDownValues'] as const;
+
+    for (const dir of directions) {
+      const { skipped, result: values } = result[dir];
+      if (!skipped) {
+        const points = values
+          .map((val) => Number(val))
+          .reduce((acc, val) => (Number.isNaN(val) ? acc : acc + val), 0);
+        scoreManager.updateScore(player.current as keyof ScoreState, points);
+      }
+    }
+  }
+
+  // update the current score div textContent
+  function updateDivText() {
+    const playerNumber: string = player.current.at(-1)!;
+    const currentPlayerDiv: Element = document.querySelector(
+      `.player-${playerNumber} > :nth-child(2)`
+    )!;
+
+    currentPlayerDiv.textContent = scoreManager
+      .getState()
+      [`${player.current as keyof ScoreState}`].toString();
   }
 }
 
@@ -519,4 +629,22 @@ function getCellPositionAndValue(
   }
 
   return [row, column];
+}
+
+function getCurrentPlayer(): string {
+  return document
+    .querySelector('.current-player-span')!
+    .textContent?.split(' ')
+    .join('')
+    .toLowerCase()!;
+}
+
+function changeCurrentPlayer(): void {
+  const currentPlayer = getCurrentPlayer();
+  const nextPlayer = currentPlayer === 'player1' ? 'Player 2' : 'Player 1';
+  document.querySelector('.current-player-span')!.textContent = nextPlayer;
+}
+
+function getCellPositionKey(position: CellPosition): string {
+  return `${position.row},${position.column}`;
 }
