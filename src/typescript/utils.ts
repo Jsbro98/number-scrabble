@@ -431,14 +431,11 @@ export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
   ####################################################
 */
 
-// FIXME: continue here
-// needs to be able to use an equals sign both ways (up/down, left/right)
-// right now it can only be used once
 export function createSubmitButtonListener() {
   const scoreManager = ScoreManagerFactory();
   const player = {
     current: getCurrentPlayer(),
-    next() {
+    switchTurns() {
       this.current = this.current === 'player1' ? 'player2' : 'player1';
     },
   };
@@ -449,13 +446,19 @@ export function createSubmitButtonListener() {
     if (updatePointsIfAllEqual()) {
       updateDivText();
       changeCurrentPlayer();
+      player.switchTurns();
     }
   };
 
-  // ----- Helper functions -----
+  // ----- createSubmitButtonListener helper functions -----
 
   function updatePointsIfAllEqual(): boolean {
+    type AllowedSetStrings = 'leftRight' | 'upDown' | 'all';
     const tiles: EqualsTile[] = EqualsTiles.getTiles();
+    const allowedDirections = {
+      upDown: true,
+      leftRight: true,
+    };
 
     if (tiles.length <= 0) return false;
 
@@ -463,8 +466,22 @@ export function createSubmitButtonListener() {
     const lastEqualsTile = tiles.at(-1)!;
 
     // if tile was already scored, return early
-    const lastEqualsPositionKey = getCellPositionKey(lastEqualsTile.position);
-    if (scoredEqualsTiles.has(lastEqualsPositionKey)) return false;
+    const lastEqualsPositionKey = getCellPositionKeys(lastEqualsTile.position);
+
+    if (
+      scoredEqualsTiles.has(lastEqualsPositionKey[0]) &&
+      scoredEqualsTiles.has(lastEqualsPositionKey[1])
+    ) {
+      return false;
+    }
+
+    if (scoredEqualsTiles.has(lastEqualsPositionKey[0])) {
+      allowedDirections.leftRight = false;
+    }
+
+    if (scoredEqualsTiles.has(lastEqualsPositionKey[1])) {
+      allowedDirections.upDown = false;
+    }
 
     const allEqual = tiles.every((tile) => {
       if (tile === lastEqualsTile) {
@@ -479,11 +496,56 @@ export function createSubmitButtonListener() {
     last placed equals sign
     */
     if (allEqual) {
-      sendPoints(lastCheck!);
-      scoredEqualsTiles.add(lastEqualsPositionKey);
+      // boolean aliases for readability
+      const bothPresent: boolean =
+        !lastCheck!.leftRightValues.skipped && !lastCheck!.upDownValues.skipped;
+
+      const leftRightPresentAndPermtted: boolean =
+        !bothPresent &&
+        allowedDirections.leftRight &&
+        lastCheck!.upDownValues.skipped;
+
+      const updDownPresentAndPermitted: boolean =
+        !bothPresent &&
+        allowedDirections.upDown &&
+        lastCheck!.leftRightValues.skipped;
+
+      if (bothPresent) {
+        addToSet(lastEqualsPositionKey, 'all');
+        sendPoints(lastCheck!);
+        return true;
+      }
+
+      if (leftRightPresentAndPermtted) {
+        addToSet(lastEqualsPositionKey, 'leftRight');
+        sendPoints(lastCheck!);
+        return true;
+      }
+
+      if (updDownPresentAndPermitted) {
+        scoredEqualsTiles.add(lastEqualsPositionKey[1]);
+        sendPoints(lastCheck!);
+        return true;
+      }
     }
 
-    return true;
+    return false;
+
+    // --- updatePointsIfAllEqual helpers ---
+    function addToSet(keys: string[], input: AllowedSetStrings): void {
+      if (input === 'leftRight') {
+        scoredEqualsTiles.add(keys[0]);
+      }
+
+      if (input === 'upDown') {
+        scoredEqualsTiles.add(keys[1]);
+      }
+
+      if (input === 'all') {
+        scoredEqualsTiles.add(keys[0]);
+        scoredEqualsTiles.add(keys[1]);
+      }
+    }
   }
 
   // give ScoreManager the points
@@ -645,6 +707,9 @@ function changeCurrentPlayer(): void {
   document.querySelector('.current-player-span')!.textContent = nextPlayer;
 }
 
-function getCellPositionKey(position: CellPosition): string {
-  return `${position.row},${position.column}`;
+function getCellPositionKeys(position: CellPosition): string[] {
+  return [
+    `${position.row},${position.column}-leftRight`,
+    `${position.row},${position.column}-upDown`,
+  ];
 }
