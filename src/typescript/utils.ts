@@ -30,7 +30,10 @@ type EqualityDirectionalArray = {
                       Interfaces
   ####################################################
 */
-
+export interface DirectionState {
+  upDown: { isSet: boolean; changed: boolean };
+  leftRight: { isSet: boolean; changed: boolean };
+}
 export interface GameGrid {
   rows: string[][];
   lastTenMoves: GameMove[];
@@ -49,7 +52,7 @@ export interface CellPosition {
   column: number;
 }
 
-interface EqualityCheckResult {
+export interface EqualityCheckResult {
   result: boolean;
   leftRightValues: EqualityDirectionalArray;
   upDownValues: EqualityDirectionalArray;
@@ -220,6 +223,7 @@ export const DragNDropManager = (() => {
         const [row, column] = getCellPositionAndValue(e);
         e.target.position = { row, column };
       }
+      document.dispatchEvent(new CustomEvent('tile-dropped'));
     });
   }
 
@@ -431,7 +435,18 @@ export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
   ####################################################
 */
 
-export function createSubmitButtonListener() {
+/*
+continue here:
+
+equals signs work, but only the last place equals sign.
+If someone wants to use another equals other than the last placed one
+it doesn't work.
+*/
+export function createSubmitButtonListener(): () => void {
+  type TileGroup = {
+    tile: EqualsTile;
+    outcome: EqualityCheckResult;
+  };
   const scoreManager = ScoreManagerFactory();
   const player = {
     current: getCurrentPlayer(),
@@ -439,7 +454,6 @@ export function createSubmitButtonListener() {
       this.current = this.current === 'player1' ? 'player2' : 'player1';
     },
   };
-  const scoredEqualsTiles = new Set<string>();
 
   // main listener
   return function submitButtonFunction() {
@@ -453,112 +467,51 @@ export function createSubmitButtonListener() {
   // ----- createSubmitButtonListener helper functions -----
 
   function updatePointsIfAllEqual(): boolean {
-    type AllowedSetStrings = 'leftRight' | 'upDown' | 'all';
-    const tiles: EqualsTile[] = EqualsTiles.getTiles();
-    const allowedDirections = {
-      upDown: true,
-      leftRight: true,
-    };
+    const tiles: EqualsTile[] = createEqualsToBeScored(EqualsTiles.getTiles());
 
     if (tiles.length <= 0) return false;
 
-    let lastCheck: EqualityCheckResult;
-    const lastEqualsTile = tiles.at(-1)!;
+    const equalityResults = tiles.map((tile) => ({
+      tile,
+      outcome: tile.runEqualityCheck(),
+    }));
 
-    // if tile was already scored, return early
-    const lastEqualsPositionKey = getCellPositionKeys(lastEqualsTile.position);
+    const allEqual = equalityResults.every(
+      (tileGroup) => tileGroup.outcome.result
+    );
 
-    if (
-      scoredEqualsTiles.has(lastEqualsPositionKey[0]) &&
-      scoredEqualsTiles.has(lastEqualsPositionKey[1])
-    ) {
-      return false;
-    }
-
-    if (scoredEqualsTiles.has(lastEqualsPositionKey[0])) {
-      allowedDirections.leftRight = false;
-    }
-
-    if (scoredEqualsTiles.has(lastEqualsPositionKey[1])) {
-      allowedDirections.upDown = false;
-    }
-
-    const allEqual = tiles.every((tile) => {
-      if (tile === lastEqualsTile) {
-        lastCheck = checkEquality(tile);
-        return lastCheck.result;
-      }
-      return checkEquality(tile).result;
-    });
-
-    /*
-    only send the points of the
-    last placed equals sign
-    */
     if (allEqual) {
-      // boolean aliases for readability
-      const bothPresent: boolean =
-        !lastCheck!.leftRightValues.skipped && !lastCheck!.upDownValues.skipped;
-
-      const leftRightPresentAndPermtted: boolean =
-        !bothPresent &&
-        allowedDirections.leftRight &&
-        lastCheck!.upDownValues.skipped;
-
-      const updDownPresentAndPermitted: boolean =
-        !bothPresent &&
-        allowedDirections.upDown &&
-        lastCheck!.leftRightValues.skipped;
-
-      if (bothPresent) {
-        addToSet(lastEqualsPositionKey, 'all');
-        sendPoints(lastCheck!);
-        return true;
-      }
-
-      if (leftRightPresentAndPermtted) {
-        addToSet(lastEqualsPositionKey, 'leftRight');
-        sendPoints(lastCheck!);
-        return true;
-      }
-
-      if (updDownPresentAndPermitted) {
-        scoredEqualsTiles.add(lastEqualsPositionKey[1]);
-        sendPoints(lastCheck!);
-        return true;
+      for (const tileGroup of equalityResults) {
+        sendPoints(tileGroup);
       }
     }
 
     return false;
-
-    // --- updatePointsIfAllEqual helpers ---
-    function addToSet(keys: string[], input: AllowedSetStrings): void {
-      if (input === 'leftRight') {
-        scoredEqualsTiles.add(keys[0]);
-      }
-
-      if (input === 'upDown') {
-        scoredEqualsTiles.add(keys[1]);
-      }
-
-      if (input === 'all') {
-        scoredEqualsTiles.add(keys[0]);
-        scoredEqualsTiles.add(keys[1]);
-      }
-    }
   }
 
+  // --- updatePointsIfAllEqual helpers ---
+
   // give ScoreManager the points
-  function sendPoints(result: EqualityCheckResult) {
+  function sendPoints(group: TileGroup) {
+    const { outcome } = group;
+
     // tuple of the keys to iterate over
     const directions = ['leftRightValues', 'upDownValues'] as const;
+    const associatedKeys = {
+      leftRightValues: 'leftRight',
+      upDownValues: 'upDown',
+    } as const;
 
     for (const dir of directions) {
-      const { skipped, result: values } = result[dir];
-      if (!skipped) {
+      const { scoreDirections } = group.tile;
+      const { skipped, result: values } = outcome[dir];
+
+      if (!skipped && !scoreDirections[associatedKeys[dir]]) {
         const points = values
+          .filter((val) => (!!Number(val) ? true : false))
           .map((val) => Number(val))
-          .reduce((acc, val) => (Number.isNaN(val) ? acc : acc + val), 0);
+          .reduce((acc, val) => acc + val, 0);
+        group.tile.changeDirectionState(associatedKeys[dir]);
         scoreManager.updateScore(player.current as keyof ScoreState, points);
       }
     }
@@ -672,7 +625,7 @@ export function GameGridFactory(): GameGrid {
   };
 }
 
-function getCellPositionAndValue(
+export function getCellPositionAndValue(
   e: Event,
   includeValue: boolean = false
 ): [number, number] | [number, number, string] {
@@ -707,9 +660,8 @@ function changeCurrentPlayer(): void {
   document.querySelector('.current-player-span')!.textContent = nextPlayer;
 }
 
-function getCellPositionKeys(position: CellPosition): string[] {
-  return [
-    `${position.row},${position.column}-leftRight`,
-    `${position.row},${position.column}-upDown`,
-  ];
+function createEqualsToBeScored(tiles: EqualsTile[]): EqualsTile[] {
+  return tiles.filter((tile) =>
+    Object.values(tile.scoreDirections).some((dir) => dir.changed)
+  );
 }
