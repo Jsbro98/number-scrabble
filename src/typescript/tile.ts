@@ -1,8 +1,13 @@
+import { MovableGridCell } from './movableGridCell';
 import {
   CellPosition,
+  DirectionState,
   DoubleClickHandler,
   DragNDropManager,
   getRandomNumber,
+  checkEquality,
+  EqualityCheckResult,
+  GridReferenceManager,
 } from './utils';
 
 export class NumberTile extends HTMLDivElement {
@@ -60,6 +65,10 @@ export class OperatorTile extends HTMLDivElement {
 
 export class EqualsTile extends HTMLDivElement {
   private tilePosition!: CellPosition;
+  private directionState: DirectionState = {
+    upDown: { isSet: false, changed: false },
+    leftRight: { isSet: false, changed: false },
+  };
 
   constructor() {
     super();
@@ -68,6 +77,10 @@ export class EqualsTile extends HTMLDivElement {
       'dblclick',
       DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
+
+    this.addEventListener('tile-dropped', () => {
+      this.checkIfTileWasAddedNear();
+    });
   }
 
   connectedCallback() {
@@ -82,6 +95,46 @@ export class EqualsTile extends HTMLDivElement {
   }
   set position(value: CellPosition) {
     this.tilePosition = value;
+  }
+
+  get scoreDirections(): DirectionState {
+    return this.directionState;
+  }
+
+  public runEqualityCheck(): EqualityCheckResult {
+    return checkEquality(this);
+  }
+
+  public changeDirectionState(direction: keyof DirectionState) {
+    if (direction !== 'leftRight' && direction !== 'upDown') {
+      throw new Error("Invalid direction provided to 'changeDirectionState'");
+    }
+    this.directionState[direction].isSet = true;
+  }
+
+  private checkIfTileWasAddedNear(): void {
+    const cell = new MovableGridCell(
+      GridReferenceManager.getGrid(),
+      this.position.row,
+      this.position.column
+    );
+
+    if (
+      cell.left &&
+      cell.right &&
+      this.scoreDirections.leftRight.isSet === false
+    ) {
+      this.scoreDirections.leftRight.changed = true;
+      // if a player moves previously set tiles, change it back
+    } else {
+      this.scoreDirections.leftRight.isSet === false;
+    }
+
+    if (cell.up && cell.down && this.scoreDirections.upDown.isSet === false) {
+      this.scoreDirections.upDown.changed = true;
+    } else {
+      this.scoreDirections.upDown.isSet === false;
+    }
   }
 }
 
