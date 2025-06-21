@@ -223,7 +223,10 @@ export const DragNDropManager = (() => {
         const [row, column] = getCellPositionAndValue(e);
         e.target.position = { row, column };
       }
-      document.dispatchEvent(new CustomEvent('tile-dropped'));
+      // have each equals check if a tile was added around it
+      EqualsTiles.getTiles().forEach((tile) => {
+        tile.checkIfTileWasAddedNear();
+      });
     });
   }
 
@@ -421,11 +424,15 @@ export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
 
   // check a string array for total equality
   function evaluateExpression(arr: string[]): boolean {
-    return arr
-      .join('')
-      .split('=')
-      .map((expression) => evaluate(expression))
-      .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
+    try {
+      return arr
+        .join('')
+        .split('=')
+        .map((expression) => evaluate(expression))
+        .every((val, _, arr) => val === arr[0]); // using (val, _, arr) to reference chained array
+    } catch (_) {
+      return false;
+    }
   }
 }
 
@@ -482,7 +489,10 @@ export function createSubmitButtonListener(): () => void {
 
     if (allEqual) {
       for (const tileGroup of equalityResults) {
-        sendPoints(tileGroup);
+        const pointsSent = sendPoints(tileGroup);
+        if (pointsSent) {
+          return true;
+        }
       }
     }
 
@@ -492,7 +502,7 @@ export function createSubmitButtonListener(): () => void {
   // --- updatePointsIfAllEqual helpers ---
 
   // give ScoreManager the points
-  function sendPoints(group: TileGroup) {
+  function sendPoints(group: TileGroup): boolean {
     const { outcome } = group;
 
     // tuple of the keys to iterate over
@@ -505,16 +515,20 @@ export function createSubmitButtonListener(): () => void {
     for (const dir of directions) {
       const { scoreDirections } = group.tile;
       const { skipped, result: values } = outcome[dir];
+      const currentDirectionObj = scoreDirections[associatedKeys[dir]];
 
-      if (!skipped && !scoreDirections[associatedKeys[dir]]) {
+      if (!skipped && !currentDirectionObj.isSet) {
         const points = values
           .filter((val) => (!!Number(val) ? true : false))
           .map((val) => Number(val))
           .reduce((acc, val) => acc + val, 0);
         group.tile.changeDirectionState(associatedKeys[dir]);
         scoreManager.updateScore(player.current as keyof ScoreState, points);
+        return true;
       }
     }
+
+    return false;
   }
 
   // update the current score div textContent
