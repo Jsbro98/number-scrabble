@@ -10,8 +10,6 @@ import '../style.css';
 
 fixmes:
 
-FIXME: see util.ts for current bug
-
 todo list:
 
 TODO: add game ending metric *2*
