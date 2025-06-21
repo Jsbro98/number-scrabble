@@ -77,10 +77,7 @@ export class EqualsTile extends HTMLDivElement {
       'dblclick',
       DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
-
-    this.addEventListener('tile-dropped', () => {
-      this.checkIfTileWasAddedNear();
-    });
+    this.addEventListener('tile-dropped', this.checkIfTileWasAddedNear);
   }
 
   connectedCallback() {
@@ -112,7 +109,7 @@ export class EqualsTile extends HTMLDivElement {
     this.directionState[direction].isSet = true;
   }
 
-  private checkIfTileWasAddedNear(): void {
+  public checkIfTileWasAddedNear(): void {
     const cell = new MovableGridCell(
       GridReferenceManager.getGrid(),
       this.position.row,
