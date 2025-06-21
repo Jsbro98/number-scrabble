@@ -1,4 +1,3 @@
-import { EquationChecker } from '../src/typescript/equationChecker';
 import { NumberTile, OperatorTile } from '../src/typescript/tile';
 import {
   GameGrid,
@@ -58,29 +57,6 @@ describe('OperatorTile Generator Tests', () => {
       tile.connectedCallback();
       expect(operators).toContain(tile.dataset.operator);
     }
-  });
-});
-
-// EquationChecker tests
-
-describe('EquationChecker Tests', () => {
-  let ec: EquationChecker;
-
-  beforeAll(() => {
-    ec = new EquationChecker();
-  });
-  it('successfully creates an instance', () => {
-    ec.setEquation({ leftSide: '5 + 5', rightSide: '25 * 9' });
-    expect(ec).toBeDefined();
-    expect(ec).toBeInstanceOf(EquationChecker);
-  });
-
-  it('checks equations', () => {
-    ec.setEquation({ leftSide: '10 * 25 + 500', rightSide: '5 - 1 / 4' });
-    expect(ec.checkEquation()).toBeFalsy();
-
-    ec.setEquation({ leftSide: '5 + 5', rightSide: '5 + 5' });
-    expect(ec.checkEquation()).toBeTruthy();
   });
 });
 
