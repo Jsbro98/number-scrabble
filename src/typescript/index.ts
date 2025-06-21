@@ -1,3 +1,30 @@
+/**
+ * Number Scrabble
+ *
+ * Rules:
+ *   1. You can place as many tiles as you want during a given turn
+ *
+ *   2. the number on the tiles is their point value.
+ *      the equations entire point value is calculated by adding
+ *      all the tiles together in a equation
+ *     ex: 2 + 2 = 4 this gives 8 points to the player
+ *
+ *   3. equations can be chained for maximum points
+ *     ex: 2 + 2 = 4 = 8 / 2 this gives 18 points to the player
+ *
+ *   4. tiles will become immovable after they're scored
+ *
+ *   5. you cannot chain on operators & operands to already existing equations
+ *      only new equations starting with an equals sign ('=') tile.
+ *      ex:
+ *       1 + 1 = 2 => *submits* scored
+ *       (1 +) 1 + 1 = 2 (+ 1) <- this is then not allowed
+ *        ^^              ^^
+ *       operators & operands within the () signal new tiles the player added
+ *
+ * TODOs and fixmes are tracked in the comments below for ongoing development.
+ */
+
 import {
   DragNDropManager,
   createAndAppendTiles,
@@ -12,10 +39,10 @@ fixmes:
 
 todo list:
 
-TODO: add game ending metric *2*
+TODO: add game ending metric *1*
   - limit number of tile refils or max points
 
-TODO: change game to better denominations (5s, 2s, or 1s) *1*
+TODO: change game to better denominations (5s, 2s, or 1s) *2*
 
 */
 
