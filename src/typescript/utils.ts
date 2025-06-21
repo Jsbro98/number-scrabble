@@ -524,6 +524,7 @@ export function createSubmitButtonListener(): () => void {
           .reduce((acc, val) => acc + val, 0);
         group.tile.changeDirectionState(associatedKeys[dir]);
         scoreManager.updateScore(player.current as keyof ScoreState, points);
+        group.tile.resetDirections();
         return true;
       }
     }

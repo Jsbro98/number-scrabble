@@ -133,6 +133,11 @@ export class EqualsTile extends HTMLDivElement {
       this.scoreDirections.upDown.isSet === false;
     }
   }
+
+  public resetDirections(): void {
+    this.scoreDirections.leftRight.changed = false;
+    this.scoreDirections.upDown.changed = false;
+  }
 }
 
 customElements.define('equals-tile', EqualsTile, { extends: 'div' });
