@@ -530,11 +530,9 @@ export function createSubmitButtonListener(): () => void {
 
     if (allEqual) {
       for (const tileGroup of equalityResults) {
-        const pointsSent = sendPoints(tileGroup);
-        if (pointsSent) {
-          return true;
-        }
+        sendPoints(tileGroup);
       }
+      return true;
     }
 
     return false;
@@ -543,7 +541,7 @@ export function createSubmitButtonListener(): () => void {
   // ----- updatePointsIfAllEqual helpers -----
 
   // give ScoreManager the points
-  function sendPoints(group: TileGroup): boolean {
+  function sendPoints(group: TileGroup): void {
     const { outcome } = group;
 
     // tuple of the keys to iterate over
@@ -560,17 +558,14 @@ export function createSubmitButtonListener(): () => void {
 
       if (!skipped && !currentDirectionObj.isSet) {
         const points = values
-          .filter((val) => (!!Number(val) ? true : false))
+          .filter((val) => !!Number(val))
           .map((val) => Number(val))
           .reduce((acc, val) => acc + val, 0);
         group.tile.changeDirectionState(associatedKeys[dir]);
         scoreManager.updateScore(player.current as keyof ScoreState, points);
         group.tile.resetDirections();
-        return true;
       }
     }
-
-    return false;
   }
 
   // --------------------------------------------------------------------------
