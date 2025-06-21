@@ -152,6 +152,14 @@ export const DragNDropManager = (() => {
         className.includes('operator')
       );
     },
+
+    tileIsDraggable(elem: Element): boolean {
+      if (elem.getAttribute('draggable')) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   };
 
   // ##### DragNDropManager Functions #####
@@ -190,6 +198,9 @@ export const DragNDropManager = (() => {
     // ##### dragstart #####
     element.addEventListener('dragstart', (e) => {
       if (e.target instanceof Element) {
+        // added these for enforced dragability checking
+        if (!dropAllowedHelper.tileIsDraggable(e.target)) return;
+
         dragElem = e.target;
 
         if (!dropAllowedHelper.containerContainsCell(e.target.parentElement!)) {
@@ -208,6 +219,7 @@ export const DragNDropManager = (() => {
     // ##### dragend #####
     element.addEventListener('dragend', (e) => {
       if (e.target instanceof Element) {
+        if (!dropAllowedHelper.tileIsDraggable(e.target)) return;
         if (!dropAllowedHelper.containerContainsCell(e.target.parentElement!)) {
           return;
         }
