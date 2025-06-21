@@ -15,6 +15,8 @@ export class NumberTile extends HTMLDivElement {
 
   constructor() {
     super();
+    this.setAttribute('draggable', 'true');
+    this.setAttribute('dblclick-listener', 'true');
     DragNDropManager.setTileDragEvent(this);
     this.numberValue = getRandomNumber(10);
     this.addEventListener(
@@ -26,7 +28,6 @@ export class NumberTile extends HTMLDivElement {
   connectedCallback() {
     this.setAttribute('data-value', this.numberValue.toString());
     this.setAttribute('is', 'number-tile');
-    this.setAttribute('draggable', 'true');
     this.classList.add('tile');
     this.textContent = this.dataset.value?.toString()!;
   }
@@ -42,6 +43,8 @@ export class OperatorTile extends HTMLDivElement {
 
   constructor() {
     super();
+    this.setAttribute('draggable', 'true');
+    this.setAttribute('dblclick-listener', 'true');
     this.currentOperator = this.getNewOperator();
     DragNDropManager.setTileDragEvent(this);
     this.addEventListener(
@@ -54,7 +57,6 @@ export class OperatorTile extends HTMLDivElement {
     this.setAttribute('is', 'operator-tile');
     this.setAttribute('data-operator', this.currentOperator);
     this.textContent = this.currentOperator;
-    this.setAttribute('draggable', 'true');
     this.classList.add('tile');
   }
 
@@ -72,6 +74,8 @@ export class EqualsTile extends HTMLDivElement {
 
   constructor() {
     super();
+    this.setAttribute('draggable', 'true');
+    this.setAttribute('dblclick-listener', 'true');
     DragNDropManager.setTileDragEvent(this);
     this.addEventListener(
       'dblclick',
@@ -82,7 +86,6 @@ export class EqualsTile extends HTMLDivElement {
 
   connectedCallback() {
     this.setAttribute('is', 'equals-tile');
-    this.setAttribute('draggable', 'true');
     this.classList.add('tile');
     this.textContent = '=';
   }
