@@ -81,7 +81,7 @@ export class EqualsTile extends HTMLDivElement {
       'dblclick',
       DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
     );
-    this.addEventListener('tile-dropped', this.checkIfTileWasAddedNear);
+    this.addEventListener('dragend', this.checkIfTileWasAddedNear);
   }
 
   connectedCallback() {
