@@ -483,7 +483,7 @@ export function createSubmitButtonListener(): () => void {
 
     // ----- inner helpers for freezeUsedTiles -----
 
-    // Uses MovableGridCell to check for any non-null neighbor
+    // uses MovableGridCell to check for any non-null neighbor
     function hasNeighbor(row: number, col: number): boolean {
       const gridCell = new MovableGridCell(grid, row, col);
       return (
