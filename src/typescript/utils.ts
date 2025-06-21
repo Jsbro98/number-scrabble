@@ -260,6 +260,7 @@ export const DragNDropManager = (() => {
 export const DoubleClickHandler = {
   handleDoubleClick(event: MouseEvent) {
     const tile = event.currentTarget as Tile;
+    if (!tile.hasAttribute('dblclick-listener')) return;
     const parent = tile.parentElement;
     const originalContainer = this.getOriginalContainer(tile);
 
@@ -458,13 +459,60 @@ export function createSubmitButtonListener(): () => void {
   // main listener
   return function submitButtonFunction() {
     if (updatePointsIfAllEqual()) {
+      freezeUsedTiles(GridReferenceManager.getGrid());
       updateDivText();
       changeCurrentPlayer();
       player.switchTurns();
     }
   };
 
-  // ----- createSubmitButtonListener helper functions -----
+  // ###### createSubmitButtonListener helper functions ######
+
+  function freezeUsedTiles(grid: GameGrid) {
+    for (let row = 0; row < grid.rows.length; row++) {
+      for (let col = 0; col < grid.rows[row].length; col++) {
+        const value = grid.getCell(row, col);
+
+        if (value !== null && hasNeighbor(row, col)) {
+          const tileElem = getTileFromDOM(col, row)!;
+          makeUnmovable(tileElem);
+          styleParentOf(tileElem);
+        }
+      }
+    }
+
+    // ----- inner helpers for freezeUsedTiles -----
+
+    // Uses MovableGridCell to check for any non-null neighbor
+    function hasNeighbor(row: number, col: number): boolean {
+      const gridCell = new MovableGridCell(grid, row, col);
+      return (
+        gridCell.left !== null ||
+        gridCell.right !== null ||
+        gridCell.up !== null ||
+        gridCell.down !== null
+      );
+    }
+
+    function getTileFromDOM(col: number, row: number): HTMLElement | null {
+      return document.querySelector(
+        `div.column:nth-child(${col + 1}) > div:nth-child(${
+          row + 1
+        }) > div:nth-child(1)`
+      );
+    }
+
+    function makeUnmovable(tile: HTMLElement): void {
+      tile.removeAttribute('draggable');
+      tile.removeAttribute('dblclick-listener');
+    }
+
+    function styleParentOf(tile: HTMLElement) {
+      tile.parentElement!.style.backgroundColor = 'rgba(0, 0, 0, 0.569)';
+    }
+  }
+
+  // --------------------------------------------------------------------------
 
   function updatePointsIfAllEqual(): boolean {
     const tiles: EqualsTile[] = createEqualsToBeScored(EqualsTiles.getTiles());
@@ -492,7 +540,7 @@ export function createSubmitButtonListener(): () => void {
     return false;
   }
 
-  // --- updatePointsIfAllEqual helpers ---
+  // ----- updatePointsIfAllEqual helpers -----
 
   // give ScoreManager the points
   function sendPoints(group: TileGroup): boolean {
@@ -524,6 +572,8 @@ export function createSubmitButtonListener(): () => void {
 
     return false;
   }
+
+  // --------------------------------------------------------------------------
 
   // update the current score div textContent
   function updateDivText() {
