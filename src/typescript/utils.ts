@@ -442,13 +442,6 @@ export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
   ####################################################
 */
 
-/*
-continue here:
-
-equals signs work, but only the last place equals sign.
-If someone wants to use another equals other than the last placed one
-it doesn't work.
-*/
 export function createSubmitButtonListener(): () => void {
   type TileGroup = {
     tile: EqualsTile;
