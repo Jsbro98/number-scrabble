@@ -51,19 +51,23 @@ TODO: change game to better denominations (5s, 2s, or 1s) *2*
 // ---------- Main function ----------
 
 function main(): void {
-  const numberTileContainer = document.querySelector('.number-tile-container');
-  const operatorTileContainer = document.querySelector(
-    '.operator-tile-container'
-  );
-  const equalsTileContainer = document.querySelector('.equals-tile-container');
+  addPlayerLogic();
+  addLogicToUIAndGrid();
+}
+
+main();
+
+// ########################################################################
+// ########################################################################
+
+// ---- Main helpers ----
+
+function addLogicToUIAndGrid(): void {
   const gridContainer = document.querySelector('.grid-container');
   const submitButton = document.querySelector('.submit-move');
   const currentPlayer = document.querySelector('.current-player');
 
   if (
-    numberTileContainer === null ||
-    operatorTileContainer === null ||
-    equalsTileContainer === null ||
     gridContainer === null ||
     submitButton === null ||
     currentPlayer === null
@@ -71,12 +75,33 @@ function main(): void {
     throw new Error('one of the game container selectors returned null');
   }
 
+  DragNDropManager.makeDragAndDropContainer(gridContainer);
+
   submitButton.addEventListener('click', createSubmitButtonListener());
+}
+
+function addPlayerLogic(): void {
+  addLogicToPlayer('player-one');
+  addLogicToPlayer('player-two');
+}
+
+function addLogicToPlayer(player: string): void {
+  const root = document.querySelector(`.${player}`)!;
+  const numberTileContainer = root.querySelector('.number-tile-container');
+  const operatorTileContainer = root.querySelector('.operator-tile-container');
+  const equalsTileContainer = root.querySelector('.equals-tile-container');
+
+  if (
+    numberTileContainer === null ||
+    operatorTileContainer === null ||
+    equalsTileContainer === null
+  ) {
+    throw new Error('one of the game container selectors returned null');
+  }
 
   DragNDropManager.makeDragAndDropContainer(
     numberTileContainer,
     operatorTileContainer,
-    gridContainer,
     equalsTileContainer
   );
 
@@ -84,8 +109,3 @@ function main(): void {
   createAndAppendTiles(operatorTileContainer, 20, 'operator');
   createAndAppendTiles(equalsTileContainer, 5, 'equals');
 }
-
-main();
-
-// ########################################################################
-// ########################################################################
