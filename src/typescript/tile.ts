@@ -18,7 +18,7 @@ export class NumberTile extends HTMLDivElement {
     this.setAttribute('draggable', 'true');
     this.setAttribute('dblclick-listener', 'true');
     DragNDropManager.setTileDragEvent(this);
-    this.numberValue = getRandomNumber(10);
+    this.numberValue = getRandomNumber(10, 1);
     this.addEventListener(
       'dblclick',
       DoubleClickHandler.handleDoubleClick.bind(DoubleClickHandler)
@@ -61,7 +61,7 @@ export class OperatorTile extends HTMLDivElement {
   }
 
   private getNewOperator(): string {
-    return this.OPERATORS[getRandomNumber(this.OPERATORS.length)];
+    return this.OPERATORS[getRandomNumber(this.OPERATORS.length, 0)];
   }
 }
 
