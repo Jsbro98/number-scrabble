@@ -625,8 +625,8 @@ export function createSubmitButtonListener(): () => void {
 */
 
 // Random number generator
-export function getRandomNumber(max: number): number {
-  return Math.floor(Math.random() * max);
+export function getRandomNumber(max: number, min: number): number {
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
 // Create and Append tile function
