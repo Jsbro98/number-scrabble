@@ -185,6 +185,25 @@ body {
 
 /* --- Player UI styling --- */
 
+.player-one,
+.player-two {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: auto;
+}
+
+.player-one,
+.player-two {
+  display: flex;
+  /* your layout */
+}
+
+.player-one[hidden],
+.player-two[hidden] {
+  display: none !important;
+}
+
 .number-tile-container,
 .operator-tile-container,
 .equals-tile-container {
