@@ -107,5 +107,5 @@ function addLogicToPlayer(player: string): void {
 
   createAndAppendTiles(numberTileContainer, 30, 'number');
   createAndAppendTiles(operatorTileContainer, 20, 'operator');
-  createAndAppendTiles(equalsTileContainer, 5, 'equals');
+  createAndAppendTiles(equalsTileContainer, 15, 'equals');
 }
