@@ -473,7 +473,8 @@ export function createSubmitButtonListener(): () => void {
     if (updatePointsIfAllEqual()) {
       freezeUsedTiles(GridReferenceManager.getGrid());
       updateDivText();
-      changeCurrentPlayer();
+      changeCurrentPlayerSpan();
+      togglePlayerViews();
       player.switchTurns();
     }
   };
@@ -592,6 +593,24 @@ export function createSubmitButtonListener(): () => void {
     currentPlayerDiv.textContent = scoreManager
       .getState()
       [`${player.current as keyof ScoreState}`].toString();
+  }
+
+  // used to switch each player's tile views
+  function togglePlayerViews() {
+    const playerNumber: 'one' | 'two' = player.current.includes('1')
+      ? 'one'
+      : 'two';
+    const oppositeNumber: 'one' | 'two' =
+      playerNumber === 'one' ? 'two' : 'one';
+
+    const currentPlayer = document.querySelector(`.player-${playerNumber}`);
+    const oppositePlayer = document.querySelector(`.player-${oppositeNumber}`);
+
+    if (!currentPlayer || !oppositePlayer)
+      throw new Error('Player selector failed in view switch');
+
+    currentPlayer.setAttribute('hidden', '');
+    oppositePlayer.removeAttribute('hidden');
   }
 }
 
@@ -719,7 +738,7 @@ function getCurrentPlayer(): string {
     .toLowerCase()!;
 }
 
-function changeCurrentPlayer(): void {
+function changeCurrentPlayerSpan(): void {
   const currentPlayer = getCurrentPlayer();
   const nextPlayer = currentPlayer === 'player1' ? 'Player 2' : 'Player 1';
   document.querySelector('.current-player-span')!.textContent = nextPlayer;
