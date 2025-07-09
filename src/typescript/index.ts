@@ -1,6 +1,8 @@
 /**
  * Number Scrabble
  *
+ *  !IMPORTANT! to reset the game, refresh the page.
+ *
  * Rules:
  *   1. You can place as many tiles as you want during a given turn
  *
@@ -39,10 +41,7 @@ fixmes:
 
 todo list:
 
-TODO: add game ending metric *1*
-  - limit number of tile refils or max points
-
-TODO: change game to better denominations (5s, 2s, or 1s) *2*
+TODO: add a reset button?
 
 */
 
