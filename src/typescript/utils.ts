@@ -1,4 +1,4 @@
-import { boolean, evaluate } from 'mathjs';
+import { evaluate } from 'mathjs';
 import { MovableGridCell } from './movableGridCell';
 import { EqualsTile, NumberTile, OperatorTile } from './tile';
 
