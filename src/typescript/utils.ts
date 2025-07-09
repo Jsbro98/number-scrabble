@@ -1,4 +1,4 @@
-import { evaluate } from 'mathjs';
+import { boolean, evaluate } from 'mathjs';
 import { MovableGridCell } from './movableGridCell';
 import { EqualsTile, NumberTile, OperatorTile } from './tile';
 
@@ -456,11 +456,22 @@ export function checkEquality(equalsTile: EqualsTile): EqualityCheckResult {
 */
 
 export function createSubmitButtonListener(): () => void {
+  // keeps track of if the game is over/the winner
+  const winnerData: { isGameFinished: boolean; winner: string } = {
+    isGameFinished: false,
+    winner: '',
+  };
+
+  // util type helper for a helper function below
   type TileGroup = {
     tile: EqualsTile;
     outcome: EqualityCheckResult;
   };
+
+  // score keeper
   const scoreManager = ScoreManagerFactory();
+
+  // player tracker
   const player = {
     current: getCurrentPlayer(),
     switchTurns() {
@@ -470,16 +481,21 @@ export function createSubmitButtonListener(): () => void {
 
   // main listener
   return function submitButtonFunction() {
-    if (updatePointsIfAllEqual()) {
-      freezeUsedTiles(GridReferenceManager.getGrid());
-      updateDivText();
-      changeCurrentPlayerSpan();
-      togglePlayerViews();
-      player.switchTurns();
+    scoreManager.updateScore('player1', 100);
+    // kill game functionality after a winner is declared
+    if (winnerData.isGameFinished) return;
+
+    // compacted to one call for readability
+    executeGameLogic();
+
+    // if there's a winner, let them know through styling
+    if (winnerData.isGameFinished) {
+      findAndSetWinner();
+      styleWinnerDiv();
     }
   };
 
-  // ###### createSubmitButtonListener helper functions ######
+  // ####### createSubmitButtonListener helper functions #######
 
   function freezeUsedTiles(grid: GameGrid) {
     for (let row = 0; row < grid.rows.length; row++) {
@@ -611,6 +627,60 @@ export function createSubmitButtonListener(): () => void {
 
     currentPlayer.setAttribute('hidden', '');
     oppositePlayer.removeAttribute('hidden');
+  }
+
+  // any winners yet?
+  function checkIfAPlayerWon(): boolean {
+    const score = scoreManager.getState();
+
+    if (score.player1 >= 75 || score.player2 >= 75) return true;
+
+    return false;
+  }
+
+  function styleWinnerDiv() {
+    if (!winnerData.winner) throw new Error('cannot style null winner');
+
+    const winner: HTMLDivElement = document.querySelector(
+      `.${winnerData.winner}`
+    )!;
+    const title: HTMLDivElement = winner.children[0] as HTMLDivElement;
+    const scoreNumber: HTMLDivElement = winner.children[1] as HTMLDivElement;
+
+    winner.style.backgroundColor = 'rgba(50, 255, 47, 0.605)';
+    title.style.fontWeight = 'bold';
+    title.textContent += ' wins!';
+    scoreNumber.style.color = 'rgba(255, 0, 0, 0.859)';
+  }
+
+  // used to seperate concerns from checkIfAPlayerWon
+  function findAndSetWinner() {
+    const score = scoreManager.getState();
+
+    if (score.player1 >= 75 && score.player2 >= 75) {
+      console.log({ score });
+      throw new Error('Both players have a winning score, check logs');
+    }
+
+    if (score.player1 >= 75) {
+      winnerData.winner = 'player-1';
+    }
+
+    if (score.player2 >= 75) {
+      winnerData.winner = 'player-2';
+    }
+  }
+
+  // consolidated game logic for easier reading in main listener
+  function executeGameLogic(): void {
+    if (updatePointsIfAllEqual()) {
+      freezeUsedTiles(GridReferenceManager.getGrid());
+      updateDivText();
+      changeCurrentPlayerSpan();
+      togglePlayerViews();
+      player.switchTurns();
+      winnerData.isGameFinished = checkIfAPlayerWon();
+    }
   }
 }
 
